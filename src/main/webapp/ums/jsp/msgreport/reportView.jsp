@@ -228,8 +228,6 @@
 				} else {
 					$tbody.html("<tr><td colspan=\"7\" class=\"text-center\">전송한 메시지 수신자가 없습니다.</td></tr>");
 				}
-				//여기는 메시지 디리리리릭임 
-				//document.getElementById("#subject").append('data.SENDLISTS.subject');
 			}
 
 		});
