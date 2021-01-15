@@ -78,6 +78,7 @@ public class MsgReportController {
 	//전송타입에 따른 결과조회 select 
 	@RequestMapping("/sendTypeSearch")
 	public @ResponseBody Map<String, Object>  sendTypeSearch(int sendtype,Model model, HttpServletResponse response, HttpServletRequest request){
+		
 		Map<String,Object> resultMap=null;
 		System.out.println("컨털 : " +sendtype);
 		try{

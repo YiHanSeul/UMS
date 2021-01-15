@@ -246,12 +246,9 @@
 		});
 	}
 	function search(){
-		var data = {
-				sendtype : sendType
-			};
 		$.ajax({
 			type : 'POST',
-			data: data,
+			data: $("#sendTypeSelect").serialize(),
 			url : '${contextPath}/ums/msgreport/sendTypeSearch.json',
 			success:function(data){
 				alert("성공");
@@ -292,12 +289,14 @@
 					<label>
 						<i class="fa fa-commenting-o title-font" aria-hidden="true"></i> 메시지 유형
 					</label>
+					<form id="selectSearch" name="selectSearch" method="post"> 
 					<select class="form-control" id="sendTypeSelect">
 						<option value="SMS">SMS</option>
 						<option value="MMS">MMS</option>
 						<option value="VMS">VMS</option>
 						<option value="FMS">FMS</option>
 					</select>
+					</form>
 				</div>
 				<div class="col-6">
 					<label>

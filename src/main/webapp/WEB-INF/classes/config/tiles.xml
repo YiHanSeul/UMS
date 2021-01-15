@@ -19,6 +19,10 @@
 	<definition name="layout:view:*/*" extends="viewDefinition">
 		<put-attribute name="body" value="/ums/jsp/{1}/{2}.jsp" />
 	</definition>
+	
+	<definition name="layout:view:*" extends="viewDefinition">
+		<put-attribute name="body" value="/ums/jsp/{1}.jsp" />
+	</definition>
 
 	<definition name="layout:form:*/*" extends="formDefinition">
 		<put-attribute name="body" value="/ums/jsp/{1}/{2}.jsp" />
