@@ -8,7 +8,9 @@ public interface MsgReportService {
 
 	Map<String,Object> reportList(Model model)throws Exception;
 
-	Map<String, Object> reportDetailList(int msgid);
+	Map<String, Object> reportDetailList(int msgid)throws Exception;
+	//전송타입에 따른 결과조회 select 
+	Map<String, Object> sendTypeSearch(int sendtype)throws Exception;
 
 
 }

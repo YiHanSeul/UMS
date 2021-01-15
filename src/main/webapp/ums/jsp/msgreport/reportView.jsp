@@ -2,12 +2,12 @@
 <script type="text/javascript">
 	var msgid = 0;
 	var splittemp;
-
+	var sendType;
 	$(document).ready(function() {
 		schReportItems();
 	
 		$("#sendTypeSelect").change(function(){
-			var sendType=$(this).children("option:selected").val();
+			sendType=$(this).children("option:selected").val();
 			alert(sendType);
 		});
 	});
@@ -247,6 +247,22 @@
 			},
 		});
 	}
+	function search(){
+		var data = {
+				sendtype : sendType
+			};
+		$.ajax({
+			type : 'POST',
+			data: data,
+			url : '${contextPath}/ums/msgreport/sendTypeSearch.json',
+			success:function(data){
+				alert("성공");
+				
+			},error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
 </script>
 <div class="detailView">
 	<div class="row">
@@ -314,7 +330,7 @@
 								</div>
 								<input type="text" class="form-control" placeholder="검색 키워드를 입력하세요!">
 								<span class="input-group-btn">
-									<button class="btn btn-primary" type="button">찾기</button>
+									<button class="btn btn-primary" type="button" onclick="search()">찾기</button>
 								</span>
 							</div>
 						</div>

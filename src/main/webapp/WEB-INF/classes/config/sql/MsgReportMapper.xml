@@ -122,5 +122,22 @@
 	]]>
 	
 	</select>
+	<select id="sendTypeSearch" resultType="SelectMsgDTO">
+	<![CDATA[
+	SELECT
+		MSGID
+		,SUBJECT
+		,SCHTYPE
+		,SENDDATE
+		,DEPARTNUM
+		,SENDTYPE
+		,MSGCNT
+		,SUCCCNT
+		,FAILCNT
+		,RESERVED1
+		FROM UMS_MSG_SEND
+		WHERE SENDTYPE=#{semdtype}
+	]]>
+	</select>
 
 </mapper>

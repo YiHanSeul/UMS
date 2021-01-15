@@ -38,6 +38,8 @@ public interface MsgReportMapper {
 	List<Map<String, Object>> destList(int msgid);
 
 	List<Map<String, Object>> reportDetailSend(int msgid);
+	//전송타입에 따른 결과조회 select 
+	List<Map<String, Object>> sendTypeSearch(int sendtype);
 
 	
 

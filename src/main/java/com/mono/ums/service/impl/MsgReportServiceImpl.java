@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.mono.ums.dto.ReportDTO;
+import com.mono.ums.dto.SelectMsgDTO;
 import com.mono.ums.mapper.MsgReportMapper;
 import com.mono.ums.service.MsgReportService;
 
@@ -69,6 +70,18 @@ public class MsgReportServiceImpl implements MsgReportService {
 		int destCnt=msgReportMapper.destListCnt(msgid);
 		//System.out.println("destList의 총 값은 : "+destCnt);
 		resultMap.put("DEST_CNT", destCnt);
+		return resultMap;
+	}
+	//전송타입에 따른 결과조회 select 
+
+	@Override
+	public Map<String, Object> sendTypeSearch(int sendtype) throws Exception {
+		Map<String ,Object> resultMap=new HashMap<String,Object>();
+		SelectMsgDTO selectMsgDTO=new SelectMsgDTO();
+		List<Map<String, Object>>sendTypeSearch=msgReportMapper.sendTypeSearch(sendtype);
+		System.out.println(selectMsgDTO);
+		resultMap.put("sendType",sendTypeSearch );
+		
 		return resultMap;
 	}
 
