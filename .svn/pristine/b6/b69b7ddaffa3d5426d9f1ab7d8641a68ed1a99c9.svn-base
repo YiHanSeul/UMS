@@ -1,0 +1,20 @@
+package com.mono.ums.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mono.ums.dto.DestTempDTO;
+import com.mono.ums.mapper.DestTempMapper;
+import com.mono.ums.service.DestTempService;
+
+@Service
+public class DestTempServiceImpl implements DestTempService {
+	@Autowired
+	DestTempMapper DestTempMapper;
+	@Override
+	public void destAdd(DestTempDTO DestTempDTO) throws Exception {
+		DestTempMapper.destAdd(DestTempDTO);
+		
+	}
+
+}

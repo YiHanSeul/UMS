@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+div.section {
+	width:100%;;
+	height:395px;
+	text-align: left;
+	float: left;
+	padding:20px;
+	border-style:solid;
+	float: left;
+	
+} 

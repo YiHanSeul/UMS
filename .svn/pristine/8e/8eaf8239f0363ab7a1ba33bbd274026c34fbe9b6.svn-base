@@ -1,0 +1,12 @@
+package com.mono.ums.mapper;
+
+import com.mono.ums.dto.SendDTO;
+
+public interface SendMapper {
+	//메시지 전송내용 추가
+	public void sendMsg(SendDTO SendDTO);
+	
+	//MMS파일 첨부 전송 
+	public void MMSsendMsg(SendDTO sendDTO);
+
+}

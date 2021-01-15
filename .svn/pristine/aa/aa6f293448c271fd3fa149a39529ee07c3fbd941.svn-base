@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mono.ums.mapper.SendMapper">
+<!-- 메시지 전송내용 sms -->
+<insert id="sendMsg">
+
+	INSERT INTO UMS_MSG_SEND(
+	msg_id,
+	sch_type,
+	subject,
+	depart_num,
+	now_date,
+	send_date,
+	total_count,
+	msg_content,
+	attach_file,
+	succ_count,
+	fail_count,
+	reserved1,
+	reserved2,
+	send_type
+)VALUES(
+	ums_msg_send_seq.nextval,
+	 #{sch_type},
+	 #{subject},
+	 #{depart_num},
+	 to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+	 #{send_date},
+	 #{total_count},
+	 #{msg_content},
+	 null,
+	 null,
+	 null,
+	 null,
+	 null,
+	 'SMS')
+</insert>
+
+<insert id="MMSsendMsg">
+
+	INSERT INTO UMS_MSG_SEND(
+	msg_id,
+	sch_type,
+	subject,
+	depart_num,
+	now_date,
+	send_date,
+	total_count,
+	msg_content,
+	attach_file,
+	succ_count,
+	fail_count,
+	reserved1,
+	reserved2,
+	send_type
+)VALUES(
+	ums_msg_send_seq.nextval,
+	 #{sch_type},
+	 #{subject},
+	 #{depart_num},
+	 to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+	 #{send_date},
+	 null,
+	 #{msg_content},
+	 #{attach_file},
+	 null,
+	 null,
+	 null,
+	 null,
+	 'SMS')
+</insert>
+
+</mapper>

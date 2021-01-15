@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mono.ums.mapper.MsgSendMapper">
+	<insert id="addSendItem" parameterType="DestTempDTO">
+	<![CDATA[
+		INSERT INTO UMS_DEST_TEMP (
+			msg_id
+			,dest_name
+			,dest_num
+			,var1
+			,var2
+			,var3
+			,var4
+			,now_date
+			,session_id
+		) VALUES (
+			DEST_TEMP_SEQ.NEXTVAL
+			,#{destNm}
+			,#{destNum}
+			,#{var1}
+			,#{var2}
+			,#{var3}
+			,#{var4}
+			,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+			,#{sessionId}
+		)			
+	]]>
+	</insert>
+	<select id="getSendItemTotalCnt" parameterType="java.util.HashMap" resultType="java.lang.Long">
+	<![CDATA[
+		SELECT COUNT(1)
+		FROM UMS_DEST_TEMP
+		WHERE 1=1
+	]]>
+		<if test="DEST_NM !=null  and !DEST_NM.equalsIgnoreCase('')">
+			<![CDATA[AND DEST_NAME LIKE '% || ${DEST_NM} || %']]>
+		</if>
+		<if test="DEST_NUM !=null  and !DEST_NUM.equalsIgnoreCase('')">
+			<![CDATA[AND DEST_NAME = #{DEST_NUM}]]>
+		</if>
+	<![CDATA[ORDER BY NOW_DATE DESC]]>
+	</select>
+
+	<select id="findSendItems" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<![CDATA[
+		SELECT 
+			DEST_NUM
+			,DEST_NAME
+			,VAR1
+			,VAR2
+			,VAR3
+			,VAR4
+		FROM UMS_DEST_TEMP
+		WHERE 1=1
+	]]>
+		<if test="DEST_NM !=null  and !DEST_NM.equalsIgnoreCase('')">
+			<![CDATA[AND DEST_NAME LIKE '% || ${DEST_NM} || %']]>
+		</if>
+		<if test="DEST_NUM !=null  and !DEST_NUM.equalsIgnoreCase('')">
+			<![CDATA[AND DEST_NAME = #{DEST_NUM}]]>
+		</if>
+	<![CDATA[ORDER BY NOW_DATE DESC]]>
+	</select>
+
+	<!-- ****************************************************** -->
+	<insert id="send" parameterType="SdkDTO">
+		<selectKey keyProperty="msg_id" resultType="int" order="BEFORE">
+			SELECT SEND_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<choose>
+			<when test="!sendDate.equalsIgnoreCase('NaN')">
+	<![CDATA[
+		INSERT INTO UMS_MSG_SEND (
+		MSGID
+		,SENDTYPE
+		,SCHTYPE
+		,SUBJECT
+		,DEPARTNUM
+		,NOWDATE
+		,SENDDATE
+		,MSGCNT
+		,MSGCONTENT
+		,RESERVED1
+		,RESERVED2
+		) VALUES(
+		#{msg_id}
+		,'SMS'
+		,#{schType}
+		,#{subject}
+		,#{departNum}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{msgCnt}
+		,#{msgContent}
+		,#{msg_id}
+		,#{reserved2,jdbcType=VARCHAR}
+		)
+	]]>
+			</when>
+			<otherwise>
+		<![CDATA[
+		INSERT INTO UMS_MSG_SEND (
+		MSG_ID
+		,SENDTYPE
+		,SCHTYPE
+		,SUBJECT
+		,DEPARTNUM
+		,NOWDATE
+		,SENDDATE
+		,MSGCOUNT
+		,MSGCONTENT
+		,RESERVED1
+		,RESERVED2
+		) VALUES(
+		#{msg_id}
+		,'SMS'
+		,#{schType}
+		,#{subject}
+		,#{departNum}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
+		,#{msgCnt}
+		,#{msgContent}
+		,#{msg_id}
+		,#{reserved2,jdbcType=VARCHAR}
+		)
+	]]>
+			</otherwise>
+		</choose>
+	</insert>
+	<!-- vms 값 추가 -->
+	<insert id="sendVMS" parameterType="SdkDTO">
+		<selectKey keyProperty="msg_id" resultType="int" order="BEFORE">
+			SELECT SEND_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		<choose>
+			<when test="!sendDate.equalsIgnoreCase('NaN')">
+	<![CDATA[
+		INSERT INTO UMS_MSG_SEND (
+		MSGID
+		,SENDTYPE
+		,SCHTYPE
+		,SUBJECT
+		,DEPARTNUM
+		,NOWDATE
+		,SENDDATE
+		,MSGCNT
+		,MSGCONTENT
+		,RESERVED1
+		,RESERVED2
+		) VALUES(
+		#{msg_id}
+		,'VMS'
+		,#{schType}
+		,#{subject}
+		,#{departNum}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{msgCnt}
+		,#{msgContent}
+		,#{msg_id}
+		,#{reserved2,jdbcType=VARCHAR}
+		)
+	]]>
+			</when>
+			<otherwise>
+		<![CDATA[
+		INSERT INTO UMS_MSG_SEND (
+		MSG_ID
+		,SENDTYPE
+		,SCHTYPE
+		,SUBJECT
+		,DEPARTNUM
+		,NOWDATE
+		,SENDDATE
+		,MSGCOUNT
+		,MSGCONTENT
+		,RESERVED1
+		,RESERVED2
+		) VALUES(
+		#{msg_id}
+		,'VMS'
+		,#{schType}
+		,#{subject}
+		,#{departNum}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
+		,#{msgCnt}
+		,#{msgContent}
+		,#{msg_id}
+		,#{reserved2,jdbcType=VARCHAR}
+		)
+	]]>
+			</otherwise>
+		</choose>
+	</insert>
+	<!-- ****************** -->
+
+	<insert id="destCopy">
+	<![CDATA[
+	INSERT INTO UMS_DEST(
+		msgId,
+		destnm,
+		destnum,
+		now_date,
+		var1,
+		var2,
+		var3,
+		var4)
+		SELECT
+		#{msg_id},
+		DEST_NAME,
+		DEST_NUM,
+		NOW_DATE,
+		VAR1,
+		VAR2,
+		VAR3,
+		VAR4
+		FROM UMS_DEST_TEMP
+	]]>
+	</insert>
+	<delete id="deleteTemp">
+		TRUNCATE TABLE UMS_DEST_TEMP
+	</delete>
+
+	<delete id="deleteSendItem">
+		TRUNCATE TABLE UMS_DEST_TEMP
+	</delete>
+	<!-- 여기는 SEND테이블 DEST테이블 조인 -->
+	<select id="tJoin" resultType="SendDTO">
+		SELECT
+		send.MSGID,
+		send.SCHTYPE,
+		send.SUBJECT,
+		send.DEPARTNUM,
+		send.NOWDATE,
+		send.SENDDATE,
+		send.MSGCNT,
+		send.MSGCONTENT,
+		dest.DESTNM,
+		dest.DESTNUM
+		from UMS_MSG_SEND send, UMS_DEST dest
+		where send.msgid=dest.msgid
+		and send.msgid=#{msg_id}
+	</select>
+
+	<!-- ************************************************* -->
+
+	<!-- SDK테이블 INSERT 즉시전송 -->
+	<insert id="insertSDK">
+		INSERT INTO SDK_SMS_SEND(
+		msg_id
+		,user_id
+		,schedule_type
+		,subject
+		,now_date
+		,send_date
+		,callback
+		,dest_count
+		,dest_info
+		,sms_msg
+		,reserved1
+		)
+		VALUES(
+		SDK_SMS_SEQ.NEXTVAL
+		,'monotest2-5'
+		,#{schType}
+		,#{subject}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{departNum}
+		,#{msgCnt}
+		,#{destInfo}
+		,#{msgContent}
+		,#{msg_id}
+		)
+	</insert>
+	<!-- SDK테이블 INSERT 예약전송 -->
+	<insert id="insertSDK2">
+		INSERT INTO SDK_SMS_SEND(
+		msg_id
+		,user_id
+		,schedule_type
+		,subject
+		,now_date
+		,send_date
+		,callback
+		,dest_count
+		,dest_info
+		,sms_msg
+		,reserved1
+		)
+		VALUES(
+		SDK_SMS_SEQ.NEXTVAL
+		,'monotest2-5'
+		,#{schType}
+		,#{subject}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
+		,#{departNum}
+		,#{msgCnt}
+		,#{destInfo}
+		,#{msgContent}
+		,#{msg_id}
+		)
+	</insert>
+
+	<insert id="insertSDKVMS">
+	<![CDATA[
+		INSERT INTO SDK_VMS_SEND(
+		msg_id
+		,user_id
+		,msg_subtype
+		,voice_type
+		,schedule_type
+		,subject
+		,now_date
+		,send_date
+		,callback
+		,tts_msg
+		,dest_count
+		,dest_info
+		,reserved1
+		)
+		VALUES(
+		SDK_VMS_SEQ.NEXTVAL
+		,'monotest2-5'
+		,'30'
+		,'0'
+		,#{schType}
+		,#{subject}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
+		,#{departNum}
+		,#{msgContent}
+		,#{msgCnt}
+		,#{destInfo}	
+		,#{msg_id}
+		)
+		]]>
+	</insert>
+	<insert id="insertSDKVMS2">
+	<![CDATA[
+		INSERT INTO SDK_VMS_SEND(
+		msg_id
+		,user_id
+		,msg_subtype
+		,voice_type
+		,schedule_type
+		,subject
+		,now_date
+		,send_date
+		,callback
+		,tts_msg
+		,dest_count
+		,dest_info
+		,reserved1
+		)
+		VALUES(
+		SDK_VMS_SEQ.NEXTVAL
+		,'monotest2-5'
+		,'30'
+		,'0'
+		,#{schType}
+		,#{subject}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{departNum}
+		,#{msgContent}
+		,#{msgCnt}
+		,#{destInfo}	
+		,#{msg_id}
+		)
+		]]>
+	</insert>
+
+
+
+	<!-- ******************************************** -->
+</mapper>

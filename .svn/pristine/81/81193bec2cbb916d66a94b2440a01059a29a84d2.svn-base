@@ -1,0 +1,173 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/header.css" />
+<link rel="stylesheet" type="text/css" href="../resources/css/section.css" />
+<title>Insert title here</title>
+<style>
+.form-group {
+	margin-top: 20px;
+}
+</style>
+</head>
+<body>
+	<jsp:include page="../section/nav.jsp"></jsp:include>
+	<header>메시지 전송 -SMS/LMS</header>
+
+	<div class="container-fluid">
+		<div class="row form-group">
+			<div class="col-md-2">
+				<div class="row">
+					<label for="SendNum">발신번호</label>
+					<input type="tel" class="form-control" id="SendNum" placeholder="번호만 입력하세요">
+				</div>
+				<div class="row">
+					<label for="ArrName">이름</label>
+					<input type="text" class="form-control" id="ArrName" placeholder="이름을 입력하세요">
+				</div>
+				<div class="row">
+					<label for="ArrNum">수신번호</label>
+					<input type="tel" class="form-control" id="ArrNum" placeholder="번호만 입력하세요">
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<button type="button" class="btn btn-primary btn-lg" onclick="Add();">추가</button>
+					</div>
+					<div class="col-md-3 col-md-offset-4">
+						<button type="button" class="btn btn-primary btn-lg" onclick="Delete();">삭제</button>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-2">
+						<label for="var1">변수1</label>
+						<input type="text" class="form-control" id="var1" placeholder="변수를입력하세요">
+					</div>
+
+
+					<div class="col-md-2">
+						<label for="var2">변수1</label>
+						<input type="text" class="form-control" id="var2" placeholder="변수를입력하세요">
+					</div>
+
+
+					<div class="col-md-2">
+						<label for="var3">변수1</label>
+						<input type="text" class="form-control" id="var3" placeholder="변수를입력하세요">
+					</div>
+
+
+					<div class="col-md-2">
+						<label for="var4">변수1</label>
+						<input type="text" class="form-control" id="var4" placeholder="변수를입력하세요">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<table class="table table-hover" id="insertTable" >
+							<thead>
+								<tr>
+									<th>번호</th>
+									<th>이름</th>
+									<th>수신번호</th>
+									<th>변수1</th>
+									<th>변수2</th>
+									<th>변수3</th>
+									<th>변수4</th>
+
+								</tr>
+							</thead>
+							<tbody >
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">이메일 주소</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="이메일을 입력하세요">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">암호</label>
+			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="암호">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputFile">파일 업로드</label>
+			<input type="file" id="exampleInputFile">
+			<p class="help-block">여기에 블록레벨 도움말 예제</p>
+		</div>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox">
+				입력을 기억합니다
+			</label>
+		</div>
+		<button type="submit" class="btn btn-default">제출</button>
+	</form> -->
+
+	<jsp:include page="../section/footer.jsp"></jsp:include>
+	<script>
+		function Add() {
+			var table1 = document.getElementById("insertTable");
+
+			//tr개체를 얻어와 속성값을 조절한다.  
+			var tr = document.createElement("tr");
+
+			var td1 = document.createElement("td");
+			td1.innerText = document.all.SendNum.value;
+
+			var td2 = document.createElement("td");
+			td2.innerText = document.all.ArrName.value;
+
+			var td3 = document.createElement("td");
+			td3.innerText = document.all.ArrNum.value;
+
+			var td4 = document.createElement("td");
+			td4.innerText = document.all.var1.value;
+
+			var td5 = document.createElement("td");
+			td5.innerText = document.all.var2.value;
+
+			var td6 = document.createElement("td");
+			td6.innerText = document.all.var3.value;
+
+			var td7 = document.createElement("td");
+			td7.innerText = document.all.var4.value;
+
+			tr.appendChild(td1);
+			tr.appendChild(td2);
+			tr.appendChild(td3);
+			tr.appendChild(td4);
+			tr.appendChild(td5);
+			tr.appendChild(td6);
+			tr.appendChild(td7);
+
+			table1.appendChild(tr);
+		}
+		function Delete(){
+			
+			
+		}
+	</script>
+	
+
+</body>
+</html>

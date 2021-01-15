@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mono.ums.mapper.MsgReportMapper">
+	<select id="sendSdktJoin" resultType="ReportDTO">
+	<![CDATA[
+	select
+        U.MSGID
+		,U.SENDTYPE
+		,U.SCHTYPE
+		,U.SUBJECT
+		,U.SENDDATE
+		,U.MSGCNT
+		,U.MSGCONTENT
+        ,T.SUCC_TOTAL
+        ,T.FAIL_TOTAL
+        ,T.RESERVED1
+        FROM
+	(SELECT
+       SUM(R.SUCC_COUNT) AS SUCC_TOTAL,SUM(R.FAIL_COUNT) AS FAIL_TOTAL, R.RESERVED1
+		FROM UMS_MSG_SEND S, SDK_SMS_REPORT_2101 R
+		WHERE S.RESERVED1 = R.RESERVED1
+        GROUP BY R.RESERVED1) T, UMS_MSG_SEND U
+        WHERE t.reserved1 = u.reserved1
+	]]>
+	</select>
+	<select id="sendSdktJoinVMS" resultType="ReportDTO">
+	<![CDATA[
+	select
+        U.MSGID
+		,U.SENDTYPE
+		,U.SCHTYPE
+		,U.SUBJECT
+		,U.SENDDATE
+		,U.MSGCNT
+		,U.MSGCONTENT
+        ,T.SUCC_TOTAL
+        ,T.FAIL_TOTAL
+        ,T.RESERVED1
+        FROM
+	(SELECT
+       SUM(R.SUCC_COUNT) AS SUCC_TOTAL,SUM(R.FAIL_COUNT) AS FAIL_TOTAL, R.RESERVED1
+		FROM UMS_MSG_SEND S, SDK_VMS_REPORT_2101 R
+		WHERE S.RESERVED1 = R.RESERVED1
+        GROUP BY R.RESERVED1) T, UMS_MSG_SEND U
+        WHERE t.reserved1 = u.reserved1
+	]]>
+	</select>
+	
+	<update id="updateSend">
+		UPDATE UMS_MSG_SEND
+		SET SUCCCNT =#{succ_total,jdbcType=VARCHAR}
+		,FAILCNT=#{fail_total,jdbcType=VARCHAR}
+		WHERE RESERVED1 = #{reserved1}
+	</update>
+	
+	<select id="sendList" resultType="SelectMsgDTO">
+		SELECT
+		MSGID
+		,SUBJECT
+		,SCHTYPE
+		,SENDDATE
+		,DEPARTNUM
+		,SENDTYPE
+		,MSGCNT
+		,SUCCCNT
+		,FAILCNT
+		,RESERVED1
+		FROM UMS_MSG_SEND
+	</select>
+
+	<select id="sendListCnt" resultType="int">
+		SELECT COUNT(*) FROM UMS_MSG_SEND
+	</select>
+	<!-- report테이블 detail 테이블 조인 -->
+	<select id="reportDetailJoin" resultType="ReportDetailDTO">
+	<![CDATA[ 
+		SELECT S.RESERVED1, R.MSG_ID ,R.SUCC_COUNT, R.FAIL_COUNT, D.MSG_ID ,D.DEST_NAME , D.PHONE_NUMBER,D.SEND_DATE, D.DELIVER_DATE , D.RESULT, D.TCS_RESULT
+		FROM SDK_SMS_REPORT_2101 R , SDK_SMS_REPORT_DETAIL_2101 D ,UMS_MSG_SEND S
+		WHERE R.MSG_ID=D.MSG_ID AND R.RESERVED1=S.RESERVED1 AND R.RESERVED1=#{msgid}
+	]]>	
+	</select>
+	
+	<select id="reportDeailJoinVMS" resultType="ReportDetailDTO">
+	<![CDATA[ 
+		SELECT S.RESERVED1, R.MSG_ID ,R.SUCC_COUNT, R.FAIL_COUNT, D.MSG_ID ,D.DEST_NAME , D.PHONE_NUMBER,D.SEND_DATE, D.RESULT, D.TCS_RESULT
+		FROM SDK_VMS_REPORT_2101 R , SDK_VMS_REPORT_DETAIL_2101 D ,UMS_MSG_SEND S
+		WHERE R.MSG_ID=D.MSG_ID AND R.RESERVED1=S.RESERVED1 AND R.RESERVED1=#{msgid}
+	]]>	
+	</select>
+	
+	<select id="destList" resultType="ReportDetailDestDTO">
+	<![CDATA[
+		SELECT 
+		MSGID
+		,DESTNUM
+		,DESTNM
+		,NOW_DATE
+		,SUCCCNT
+		FROM UMS_DEST
+		WEHRE MSGID={msgid}
+	]]>
+	</select>
+	
+	<select id="destListCnt" resultType="int">
+	 SELECT COUNT(*) FROM UMS_DEST 
+	 WHERE MSGID=#{msgid}
+	</select> 
+	
+	<select id="reportDetailSend" resultType="ReportDetailSendDTO">
+	<![CDATA[ 
+	SELECT 
+	SUBJECT
+	,MSGCONTENT
+	,SENDTYPE
+	,DEPARTNUM
+	,NOWDATE
+	,SENDDATE
+	,ATTACHFILE
+	,RESERVED1
+	FROM UMS_MSG_SEND 
+	WHERE MSGID=#{msgid}
+	]]>
+	
+	</select>
+
+</mapper>

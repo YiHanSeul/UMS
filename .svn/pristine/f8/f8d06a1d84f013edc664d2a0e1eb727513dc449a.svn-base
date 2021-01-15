@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mono.ums.mapper.SendMapper">
+	<!-- 메시지 전송내용 sms -->
+	<insert id="sendMsg">
+		<selectKey keyProperty="msg_id" resultType="int" order="AFTER">
+			SELECT UMS_MSG_SEND_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+		INSERT INTO UMS_MSG_SEND(
+		msg_id,
+		sch_type,
+		subject,
+		depart_num,
+		now_date,
+		send_date,
+		total_count,
+		msg_content,
+		attach_file,
+		succ_count,
+		fail_count,
+		reserved1,
+		reserved2,
+		send_type
+		)VALUES(
+		UMS_MSG_SEND_SEQ.NEXTVAL,
+		#{sch_type},
+		#{subject},
+		#{depart_num},
+		to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+		#{send_date},
+		#{total_count},
+		#{msg_content},
+		null,
+		null,
+		null,
+		null,
+		null,
+		'SMS')
+	</insert>
+	<!-- 메시지 전송내용 sms -->
+	<insert id="sendMsg2">
+		<selectKey keyProperty="msg_id" resultType="int" order="AFTER">
+			SELECT UMS_MSG_SEND_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+		INSERT INTO UMS_MSG_SEND(
+		msg_id,
+		sch_type,
+		subject,
+		depart_num,
+		now_date,
+		send_date,
+		total_count,
+		msg_content,
+		attach_file,
+		succ_count,
+		fail_count,
+		reserved1,
+		reserved2,
+		send_type
+		)VALUES(
+		UMS_MSG_SEND_SEQ.NEXTVAL,
+		#{sch_type},
+		#{subject},
+		#{depart_num},
+		to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+		to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+		#{total_count},
+		#{msg_content},
+		null,
+		null,
+		null,
+		null,
+		null,
+		'SMS')
+	</insert>
+	<insert id="destCopy">
+
+		INSERT INTO UMS_DEST(
+		MSG_ID,
+		DEST_NAME,
+		DEST_NUM,
+		NOW_DATE,
+		SEND_DATE,
+		SEND_STATUS,
+		TCS_RESULT,
+		FIND_MONTH,
+		VAR1,
+		VAR2,
+		VAR3,
+		VAR4)
+		SELECT
+		#{msg_id},
+		DEST_NAME,
+		DEST_NUM,
+		NOW_DATE,
+		SEND_DATE,
+		SEND_STATUS,
+		TCS_RESULT,
+		FIND_MONTH,
+		VAR1,
+		VAR2,
+		VAR3,
+		VAR4
+		FROM UMS_DEST_TEMP
+
+	</insert>
+	<!-- 여기는 join문임  -->
+	<resultMap type="DestTempDTO" id="DestTempDTO">
+		<result column="dest_name" property="dest_name" />
+		<result column="dest_num" property="dest_num" />
+	</resultMap>
+
+	<resultMap type="SendDTO" id="SendDTO">
+		<result column="msg_id" property="msg_id" />
+		<result column="sch_type" property="sch_type" />
+		<result column="subject" property="subject" />
+		<result column="depart_num" property="depart_num" />
+		<result column="now_date" property="now_date" />
+		<result column="send_date" property="send_date" />
+		<result column="total_count" property="total_count" />
+		<result column="msg_content" property="msg_content" />
+		<collection property="DestTempDTO" resultMap="DestTempDTO"/>
+	</resultMap>
+
+	<select id="tJoin" resultType="SdkDTO">
+		SELECT
+		send.msg_id,
+		send.sch_type,
+		send.subject,
+		send.depart_num,
+		send.now_date,
+		send.send_date,
+		send.total_count,
+		send.msg_content,
+		dest.dest_name,
+		dest.dest_num
+		from UMS_MSG_SEND send inner join UMS_DEST dest
+		on send.msg_id=dest.msg_id
+		where send.msg_id=#{msg_id}
+	</select>
+	
+	<insert id="insertSDK">
+	INSERT INTO SDK_SMS_SEND(
+		msg_id,
+		schedule_type,
+		subject,
+		now_date,
+		send_date,
+		callback,
+		dest_count,
+		dest_info,
+		sms_msg
+		)
+		VALUES(
+		SDK_SMS_SEQ.NEXTVAL,
+		#{sch_type},
+		#{subject},
+		to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+		#{send_date},
+		#{depart_num},
+		#{total_count},
+		#{dest_info},
+		#{msg_content}
+		)
+	</insert>
+	<insert id="MMSsendMsg">
+
+		INSERT INTO UMS_MSG_SEND(
+		msg_id,
+		sch_type,
+		subject,
+		depart_num,
+		now_date,
+		send_date,
+		total_count,
+		msg_content,
+		attach_file,
+		succ_count,
+		fail_count,
+		reserved1,
+		reserved2,
+		send_type
+		)VALUES(
+		ums_msg_send_seq.nextval,
+		#{sch_type},
+		#{subject},
+		#{depart_num},
+		to_char(sysdate,'yyyy-mm-dd hh24:mi'),
+		#{send_date},
+		null,
+		#{msg_content},
+		#{attach_file},
+		null,
+		null,
+		null,
+		null,
+		'SMS')
+	</insert>
+
+	<delete id="deleteTemp">
+		TRUNCATE TABLE UMS_DEST_TEMP
+	</delete>
+</mapper>

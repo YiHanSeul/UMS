@@ -1,0 +1,27 @@
+package com.mono.ums.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/send/*")
+public class SendController {
+	
+	@RequestMapping("/send_sms")
+	public String send_sms(){
+		return "send/send_sms";
+				
+	}
+	@RequestMapping("/send_mms")
+	public String send_mms(){
+		return "send/send_mms";
+	}
+	@RequestMapping("/send_vms")
+	public String send_vms(){
+		return "send/send_vms";
+	}
+	@RequestMapping("/send_fms")
+	public String send_fms(){
+		return "send/send_fms";
+	}
+}

@@ -1,0 +1,225 @@
+@CHARSET "UTF-8";
+
+/*****헤더*****/
+.header {
+	height: 100px;
+	text-align: center;
+	padding-top: 30px;
+	margin-bottom: 10px;
+}
+
+.container-fluid>.row>.col-12 {
+	box-shadow: 0px 0px 5px 0px gray;
+	margin-bottom: 60px;
+}
+
+#header_title {
+	
+}
+
+/*.title-font {
+	color: #1c8be6;
+	font-weight: bold;
+} */
+/**사이더**/
+.main_box {
+	margin-top: 100px;
+}
+
+#sider {
+	height: 720px;
+}
+
+.basic_tabs {
+	width: 215px;
+	position: relative;
+	float: left;
+	margin: 10px;
+}
+
+.tabs_content {
+	position: relative;
+	float: left;
+	width: 1080px;
+	height: 720px;
+	margin: 10px;
+}
+
+.basic_tabs {
+	border-bottom: 1px solid #CECECE;
+	border-radius: 5px 5px 5px 5px;
+}
+
+.basic_tabs ul li {
+	border-left: 1px solid #DADADA;
+	border-top: 1px solid #DADADA;
+	min-width: 150px;
+	height: 35px;
+	background-color: #FAF9F9;
+	border-right: 1px solid #DADADA;
+}
+
+.basic_tabs ul li, .basic_tabs ul li button {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	display: block;
+	color: gray;
+	font-weight: 700;
+}
+
+.basic_tabs ul li.estevent:hover {
+	color: #0077f6;
+	font-weight: bold;
+	font-size: 17px;
+}
+
+.basic_tabs ul li.active {
+	border-top: 1px solid #0077f6;
+	border-bottom: 1px solid #0077f6;
+	background-color: #FFF;
+}
+
+.basic_tabs ul li:nth-child(1) {
+	border-radius: 5px 5px 0px 0px;
+}
+
+.basic_tabs ul li:nth-child(7) {
+	border-radius: 0px 0px 5px 5px;
+}
+
+.basic_tabs ul li.active, .basic_tabs ul li.active>button {
+	color: #0c3e9a;
+	font-weight: 900;
+}
+
+.detail_tabs {
+	margin: 0px;
+	padding: 0px;
+}
+
+.tabs_content {
+	background-color: #DADADA;
+}
+
+.content_list_basic li {
+	display: none;
+	list-style-type: none;
+}
+
+.content_list_basic li.content_active {
+	display: block;
+}
+
+.basic_tabs .detail_tabs {
+	display: table;
+	width: 100%;
+	cursor: pointer;
+}
+
+.basic_tabs .detail_tabs li {
+	float: none;
+	display: block;
+	width: 215px
+}
+
+/* sms  part */
+#danjang {
+	float: right;
+	color: white;
+	background-color: dodgerblue;
+	font-weight: bold;
+	border-radius: 4px;
+	padding: 2px;
+	margin-top: 2px;
+}
+
+#nowdanjang {
+	float: right;
+	margin-right: 10px;
+}
+
+#callnum {
+	margin-top: 17px;
+}
+
+h5 {
+	color: #0c3e9a;
+	font-weight: bold;
+}
+/* 테이블 스크롤*/
+.table tbody, thead tr {
+	display: block;
+}
+
+.table tbody {
+	height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.table tbody td, thead th {
+	width: 250px;
+}
+
+#sendlist td, #receiveList td {
+	width: 1920px;
+}
+
+.table thead th:last-child {
+	width: 156px; /* 140px + 16px scrollbar width */
+}
+
+#msg_content {
+	height: 180px;
+}
+
+.detailView {
+	border: 5px solid #0c3e9a;
+	padding: 10px;
+	border-radius: 10px;
+	margin-bottom: 25px;
+}
+
+.detailViewIn {
+	display: none;
+	border: 5px solid #0c3e9a;
+	padding: 10px;
+	border-radius: 10px;
+	margin-bottom: 200px;
+}
+
+#sendT {
+	border: 5px solid #0c3e9a;
+	padding: 10px;
+	border-radius: 10px;
+	margin-bottom: 25px;
+}
+
+.headerId {
+	font-size: 25px;
+	color: white;
+	background: #0c3e9a;
+	width: 100px;
+	text-align: center;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+#detailViewIn1 {
+	margin-top: 20px;
+}
+
+/* mms */
+#imgPreviewCell {
+	display: none;
+}
+
+.imgPreview {
+	width: 33%;
+	height: 100px;
+	border-radius: 10px;
+	border: 3px solid lightgray;
+	float: left;
+}

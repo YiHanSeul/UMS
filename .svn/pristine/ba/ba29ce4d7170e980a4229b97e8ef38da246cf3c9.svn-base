@@ -1,0 +1,55 @@
+@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+.container-fluid {
+	position: absolute;
+	height: 800px;
+	/* padding: 80px; */
+	left: 400px;
+}
+
+#msg_content {
+	height: 182px;
+	margin-left: 18px;
+	width:950px;
+}
+
+#SendBtn {
+	position:absolute;
+	left:885px;
+	margin-top: 15px;
+}
+
+.my-custom-scrollbar {
+position: relative;
+height: 200px;
+overflow: auto;
+margin-top: 25px;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+#rows{
+	margin-top: 50px;
+	border:1px solid balck;
+	
+}
+#insertTable th{
+	position: sticky;
+    top: 0px;
+    background-color: white;
+	
+}
+.form-group{	
+	width: 100%;
+}
+.imgs_wrap{
+	width:600px;
+	margin-top: 50px;
+}
+.imgs_wrap img{
+	max-width: 200px;
+}
+#attach_file {
+	margin-top: 15px;
+	margin-left: 18px;
+}

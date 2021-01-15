@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mono.ums.mapper.DestTempMapper">
+	<!-- 수신자 목록 추가 -->
+	<insert id="destAdd">
+		INSERT INTO UMS_DEST_TEMP(
+		dest_seq,
+		dest_name,
+		dest_num,
+		now_date,
+		send_date,
+		send_status,
+		tcs_result,
+		find_month,
+		var1,
+		var2,
+		var3,
+		var4)
+		VALUES(
+		UMS_DEST_TEMP_SEQ.nextval,
+		#{dest_name,jdbcType=VARCHAR},
+		#{dest_num,jdbcType=VARCHAR},
+		null,
+		null,
+		null,
+		null,
+		null,
+		#{var1,jdbcType=VARCHAR},
+		#{var2,jdbcType=VARCHAR},
+		#{var3,jdbcType=VARCHAR},
+		#{var4,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 수신자 목록 삭제 -->
+	<delete id="destDelete" parameterType="int">
+		DELETE
+		FROM UMS_DEST_TEMP
+		WHERE DEST_SEQ in
+		(SELECT MAX(DEST_SEQ) FROM UMS_DEST_TEMP)
+	</delete>
+
+</mapper> 

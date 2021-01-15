@@ -1,0 +1,7 @@
+package com.mono.ums.mapper;
+
+import com.mono.ums.dto.DestTempDTO;
+
+public interface DestTempMapper {
+	public void destAdd(DestTempDTO DestTempDTO);
+}

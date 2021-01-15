@@ -1,0 +1,19 @@
+package com.mono.ums.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/result/*")
+public class resultController {
+	
+	@RequestMapping("/umsView")
+	public String umsView(){
+		return "result/umsView";
+	}
+	@RequestMapping("/umsViewDetail")
+	public String umsViewDetail(){
+		return "result/umsViewDetail";
+	}
+
+}

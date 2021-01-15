@@ -1,0 +1,31 @@
+package com.mono.ums.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mono.ums.dto.TestDTO;
+import com.mono.ums.service.TestService;
+
+@Controller
+@RequestMapping("/test/*")
+public class TestController {
+
+	@Autowired
+	private TestService testService;
+
+	@RequestMapping("/test")
+	public String test(Model model) {
+		List<TestDTO> boards = testService.viewAll();
+
+		for (TestDTO testDTO : boards) {
+			System.out.println(testDTO.getBno());
+		}
+
+		model.addAttribute("boards", boards);
+		return "test/test";
+	}
+}

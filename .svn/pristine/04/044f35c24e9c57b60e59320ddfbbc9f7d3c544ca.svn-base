@@ -1,0 +1,71 @@
+package com.mono.ums.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mono.ums.dto.DestTempDTO;
+import com.mono.ums.dto.SendDTO;
+import com.mono.ums.service.DestTempService;
+import com.mono.ums.service.SendService;
+
+@Controller
+@RequestMapping("/send/*")
+public class SendController {
+
+	@Autowired
+	DestTempService DestTempService;
+	
+	@Autowired
+	SendService SendService;
+
+	@RequestMapping("/send_sms")
+	public String send_sms() {
+		return "send/send_sms";
+
+	}
+	//수신자 추가
+	@ResponseBody
+	@PostMapping("/destAdd")
+	public String destAdd(DestTempDTO DestTempDTO) throws Exception {
+		System.out.println("여기는 destAdd 수신자 추가 메소드 입니다.");
+		System.out.println(DestTempDTO.toString());
+		DestTempService.destAdd(DestTempDTO);
+		return "redirect:/send/send_sms";
+	}
+	//수신자 삭제 삭제는 반드시 post방식으로 처리
+	@PostMapping("/destDelete")
+	public String destDelete(DestTempDTO DestTempDTO)throws Exception{
+		System.out.println("여기는 destDelete 수신자 삭제 메소드 입니다.");
+		System.out.println(DestTempDTO.toString());
+		DestTempService.destDelete(DestTempDTO.getDest_seq());
+		return"redirect:/send/send_sms";
+	}
+	//메시지 전송
+	@ResponseBody
+	@PostMapping("/sendMsg")
+	public String sendMsg(SendDTO SendDTO)throws Exception{
+		System.out.println("여기는 sendMsg 메시지 전송 메소드 입니다.");
+		System.out.println(SendDTO.toString());
+		SendService.sendMsg(SendDTO);
+		return "redirect:/send/send_sms";
+	}
+
+	@RequestMapping("/send_mms")
+	public String send_mms() {
+		return "send/send_mms";
+	}
+
+	@RequestMapping("/send_vms")
+	public String send_vms() {
+		return "send/send_vms";
+	}
+
+	@RequestMapping("/send_fms")
+	public String send_fms() {
+		return "send/send_fms";
+	}
+}

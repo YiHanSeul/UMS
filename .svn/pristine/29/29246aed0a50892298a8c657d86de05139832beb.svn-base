@@ -1,0 +1,11 @@
+package com.mono.ums.service;
+
+import com.mono.ums.dto.SendDTO;
+
+public interface SendService {
+	//메시지 전송  내용 추가
+	public void sendMsg(SendDTO SendDTO)throws Exception;
+	
+	public void MMSsendMsg(SendDTO SendDTO) throws Exception;
+	
+}

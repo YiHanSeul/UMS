@@ -1,0 +1,30 @@
+package com.mono.ums.mapper;
+
+import java.util.List;
+
+import com.mono.ums.dto.SdkDTO;
+import com.mono.ums.dto.SendDTO;
+
+public interface SendMapper {
+	//메시지 전송내용 추가
+	public void sendMsg(SendDTO SendDTO);
+	
+	public void sendMsg2(SendDTO SendDTO);
+	
+	//MMS파일 첨부 전송 
+	public void MMSsendMsg(SendDTO sendDTO);
+
+	public void destCopy(SendDTO sendDTO);
+
+	public void deleteTemp(SendDTO sendDTO);
+
+//	public void tJoin(SendDTO sendDTO);
+	
+	public List<SdkDTO> tJoin(SendDTO sendDTO) throws Exception;
+
+	public void insertSDK(SdkDTO SdkDTO)throws Exception;
+
+	
+	
+
+}

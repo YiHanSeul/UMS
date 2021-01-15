@@ -1,0 +1,27 @@
+package com.mono.ums.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mono.ums.dto.SendDTO;
+import com.mono.ums.mapper.SendMapper;
+import com.mono.ums.service.SendService;
+
+@Service
+public class SendServiceImpl implements SendService {
+	@Autowired
+	SendMapper SendMapper;
+	@Override
+	public void sendMsg(SendDTO SendDTO) throws Exception {
+		SendMapper.sendMsg(SendDTO);
+		
+	}
+	
+	//MMS파일첨부 
+	@Override
+	public void MMSsendMsg(SendDTO SendDTO) throws Exception {
+		SendMapper.MMSsendMsg(SendDTO);
+		
+	}
+
+}

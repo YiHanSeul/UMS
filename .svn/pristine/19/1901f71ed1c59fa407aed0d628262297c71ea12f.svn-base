@@ -1,0 +1,95 @@
+package com.mono.ums.dto;
+
+public class DestTempDTO {
+	int dest_seq;
+	String dest_name;
+	String dest_num;
+	String now_date;
+	String send_date;
+	String send_status;
+	String tcs_result;
+	String find_month;
+	String var1;
+	String var2;
+	String var3;
+	String var4;
+	public int getDest_seq() {
+		return dest_seq;
+	}
+	public void setDest_seq(int dest_seq) {
+		this.dest_seq = dest_seq;
+	}
+	public String getDest_name() {
+		return dest_name;
+	}
+	public void setDest_name(String dest_name) {
+		this.dest_name = dest_name;
+	}
+	public String getDest_num() {
+		return dest_num;
+	}
+	public void setDest_num(String dest_num) {
+		this.dest_num = dest_num;
+	}
+	public String getNow_date() {
+		return now_date;
+	}
+	public void setNow_date(String now_date) {
+		this.now_date = now_date;
+	}
+	public String getSend_date() {
+		return send_date;
+	}
+	public void setSend_date(String send_date) {
+		this.send_date = send_date;
+	}
+	public String getSend_status() {
+		return send_status;
+	}
+	public void setSend_status(String send_status) {
+		this.send_status = send_status;
+	}
+	public String getTcs_result() {
+		return tcs_result;
+	}
+	public void setTcs_result(String tcs_result) {
+		this.tcs_result = tcs_result;
+	}
+	public String getFind_month() {
+		return find_month;
+	}
+	public void setFind_month(String find_month) {
+		this.find_month = find_month;
+	}
+	public String getVar1() {
+		return var1;
+	}
+	public void setVar1(String var1) {
+		this.var1 = var1;
+	}
+	public String getVar2() {
+		return var2;
+	}
+	public void setVar2(String var2) {
+		this.var2 = var2;
+	}
+	public String getVar3() {
+		return var3;
+	}
+	public void setVar3(String var3) {
+		this.var3 = var3;
+	}
+	public String getVar4() {
+		return var4;
+	}
+	public void setVar4(String var4) {
+		this.var4 = var4;
+	}
+	@Override
+	public String toString() {
+		return "DestTempDTO [dest_seq=" + dest_seq + ", dest_name=" + dest_name + ", dest_num=" + dest_num + ", now_date=" + now_date + ", send_date="
+				+ send_date + ", send_status=" + send_status + ", tcs_result=" + tcs_result + ", find_month=" + find_month + ", var1=" + var1
+				+ ", var2=" + var2 + ", var3=" + var3 + ", var4=" + var4 + "]";
+	}
+	
+}

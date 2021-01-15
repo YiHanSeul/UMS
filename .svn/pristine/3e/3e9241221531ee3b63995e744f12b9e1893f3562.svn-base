@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+.container-fluid {
+	position: absolute;
+	height: 800px;
+	/* padding: 80px; */
+	left: 350px;
+	width: 1600px;
+	margin: auto;
+}
+
+#msg_content {
+	height: 152px;
+}
+
+#SendBtn {
+	float:right;
+	margin-top: 15px;
+}
+
+.my-custom-scrollbar {
+position: relative;
+height: 200px;
+overflow: auto;
+margin-top: 25px;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+#rows{
+	margin-top: 50px;
+	border:1px solid balck;
+	
+}
+#insertTable th{
+	position: sticky;
+    top: 0px;
+    background-color: white;
+	
+}
+.form-group{	
+	width: 100%;
+	margin: auto;
+}

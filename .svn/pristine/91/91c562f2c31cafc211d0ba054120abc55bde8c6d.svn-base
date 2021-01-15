@@ -1,0 +1,8 @@
+package com.mono.ums.service;
+
+import com.mono.ums.dto.DestTempDTO;
+
+public interface DestTempService {
+	public void destAdd(DestTempDTO DestTempDTO) throws Exception;
+
+}

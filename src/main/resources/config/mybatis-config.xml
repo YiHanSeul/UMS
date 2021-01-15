@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias alias="DestTempDTO" type="com.mono.ums.dto.DestTempDTO" />
+		<typeAlias alias="SendDTO" type="com.mono.ums.dto.SendDTO"/>
+		<typeAlias alias="SdkDTO" type="com.mono.ums.dto.SdkDTO"/>
+		<typeAlias alias="ReportDTO" type="com.mono.ums.dto.ReportDTO"/>
+		<typeAlias alias="SelectMsgDTO" type="com.mono.ums.dto.SelectMsgDTO"/>
+		<typeAlias alias="ReportDetailDTO" type="com.mono.ums.dto.ReportDetailDTO"/>
+		<typeAlias alias="ReportDetailDestDTO" type="com.mono.ums.dto.ReportDetailDestDTO"/>
+		<typeAlias alias="ReportDetailSendDTO" type="com.mono.ums.dto.ReportDetailSendDTO"/>
+	</typeAliases>
+</configuration>

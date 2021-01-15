@@ -1,0 +1,92 @@
+package com.mono.ums.dto;
+
+public class SdkDTO {
+	int msg_id;
+	int sch_type;
+	String subject;
+	String depart_num;
+	String now_date;
+	String send_date;
+	int total_count;
+	String msg_content;
+	String dest_name;
+	String dest_num;
+	String dest_info;
+	public int getMsg_id() {
+		return msg_id;
+	}
+	public void setMsg_id(int msg_id) {
+		this.msg_id = msg_id;
+	}
+	public int getSch_type() {
+		return sch_type;
+	}
+	public void setSch_type(int sch_type) {
+		this.sch_type = sch_type;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public String getDepart_num() {
+		return depart_num;
+	}
+	public void setDepart_num(String depart_num) {
+		this.depart_num = depart_num;
+	}
+	public String getNow_date() {
+		return now_date;
+	}
+	public void setNow_date(String now_date) {
+		this.now_date = now_date;
+	}
+	public String getSend_date() {
+		return send_date;
+	}
+	public void setSend_date(String send_date) {
+		this.send_date = send_date;
+	}
+	public int getTotal_count() {
+		return total_count;
+	}
+	public void setTotal_count(int total_count) {
+		this.total_count = total_count;
+	}
+	public String getMsg_content() {
+		return msg_content;
+	}
+	public void setMsg_content(String msg_content) {
+		this.msg_content = msg_content;
+	}
+	public String getDest_name() {
+		return dest_name;
+	}
+	public void setDest_name(String dest_name) {
+		this.dest_name = dest_name;
+	}
+	public String getDest_num() {
+		return dest_num;
+	}
+	public void setDest_num(String dest_num) {
+		this.dest_num = dest_num;
+	}
+	public String getDest_info() {
+		return dest_info;
+	}
+	public void setDest_info(String dest_info) {
+		this.dest_info = dest_info;
+	}
+	@Override
+	public String toString() {
+		return "SdkDTO [msg_id=" + msg_id + ", sch_type=" + sch_type + ", subject=" + subject + ", depart_num=" + depart_num + ", now_date="
+				+ now_date + ", send_date=" + send_date + ", total_count=" + total_count + ", msg_content=" + msg_content + ", dest_name=" + dest_name
+				+ ", dest_num=" + dest_num + ", dest_info=" + dest_info + "]";
+	}
+	
+	
+
+	
+	}
+
