@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mono.ums.dto.ReportDTO;
+import com.mono.ums.dto.SearchDTO;
 
 public interface MsgReportMapper {
 	//send테이블 report테이블 조인
@@ -39,7 +40,11 @@ public interface MsgReportMapper {
 
 	List<Map<String, Object>> reportDetailSend(int msgid);
 	//전송타입에 따른 결과조회 select 
-	List<Map<String, Object>> sendTypeSearch(int sendtype);
+	List<Map<String, Object>> sendTypeSearch(String sendtype);
+
+	void sendTypeSelect(SearchDTO search);
+
+	int destListCntType(String sendtype);
 
 	
 

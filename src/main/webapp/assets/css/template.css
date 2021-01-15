@@ -216,10 +216,25 @@ h5 {
 	display: none;
 }
 
-.imgPreview {
+.imgPreview > img{
 	width: 33%;
 	height: 100px;
 	border-radius: 10px;
 	border: 3px solid lightgray;
 	float: left;
+	z-index: 0;
+}
+
+.imgPreview > .imgPreviewX{
+	position: absolute;
+	display: none;
+	font-size: 30px;
+	color: salmon;
+	z-index: 1;
+}
+
+.imgPreview:hover .imgPreviewX{
+	display: inline-block;
+	
+	
 }

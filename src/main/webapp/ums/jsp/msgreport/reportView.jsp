@@ -2,14 +2,9 @@
 <script type="text/javascript">
 	var msgid = 0;
 	var splittemp;
-	var sendType;
 	$(document).ready(function() {
 		schReportItems();
-	
-		$("#sendTypeSelect").change(function(){
-			sendType=$(this).children("option:selected").val();
-			alert(sendType);
-		});
+
 	});
 
 	function phoneFomatter(num, type) {
@@ -246,17 +241,95 @@
 		});
 	}
 	function search(){
-		$.ajax({
-			type : 'POST',
-			data: $("#sendTypeSelect").serialize(),
-			url : '${contextPath}/ums/msgreport/sendTypeSearch.json',
-			success:function(data){
-				alert("성공");
-				
-			},error : function(request, status, error) {
-				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-			}
-		});
+		if ( $("#sendTypeSelect").val() == "ALL") {
+			 schReportItems();
+		}else{
+			var data = {
+					sendtype: $("#sendTypeSelect").val()
+				};
+			$.ajax({
+				type : 'POST',
+				data: data,
+				url : '${contextPath}/ums/msgreport/sendTypeSearch.json',
+				success:function(data){
+					var $tbody = $("#sendlist");
+					$tbody.children().remove();
+					$("#msgCnt").text("총" + data.DEST_CNT + "건");
+					if (data.DEST_CNT > 0) {
+						$tbody.html("");
+						var datesort = [];
+						for (var i = 0; i < data.sendType.length; i++) {
+							datesort[i] = {
+								number: i,
+								time: parseInt(data.sendType[i].senddate)
+							}
+						}
+
+						datesort.sort(function (a, b) {  //정렬하는거 
+							return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;  
+						});
+
+						 
+						 for (var i = 0; i < data.sendType.length; i++) {
+							var lmmtemp = data.sendType.length-1-i;
+							var $tr = $("<tr id='trset_"+data.sendType[datesort[lmmtemp]['number']].msgid+"'/>");
+							var $tdCol1 = $("<td />");
+							var $tdCol2 = $("<td />");
+							var $tdCol3 = $("<td />");
+							var $tdCol4 = $("<td />");
+							var $tdCol5 = $("<td />");
+							var $tdCol6 = $("<td />");
+							var $tdCol7 = $("<td />");
+							var $tdCol8 = $("<td />");
+							var $tdCol9 = $("<td />");
+							$tdCol1.text(lmmtemp+1);
+							$tdCol2.text(data.sendType[datesort[lmmtemp]['number']].subject);
+							if (data.sendType[i].schtype == 0) {
+								$tdCol3.text('즉시전송');
+							} else {
+								$tdCol3.text('예약전송');
+							}
+							var prettydate = "";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(0, 4) + "-";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(4, 6) + "-";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(6, 8) + " ";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(8, 10) + ":";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
+							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(12, 14);
+							$tdCol4.text(prettydate);
+							$tdCol5.text(phoneFomatter(data.sendType[datesort[lmmtemp]['number']].departnum, 1));
+
+							$tdCol6.text(data.sendType[datesort[lmmtemp]['number']].sendtype);
+							$tdCol7.text(data.sendType[datesort[lmmtemp]['number']].msgcnt);
+							$tdCol8.text(data.sendType[datesort[lmmtemp]['number']].succcnt);
+							$tdCol9.text(data.sendType[datesort[lmmtemp]['number']].failcnt);
+
+							$tr.append($tdCol1);
+							$tr.append($tdCol2);
+							$tr.append($tdCol3);
+							$tr.append($tdCol4);	
+							$tr.append($tdCol5);
+							$tr.append($tdCol6);
+							$tr.append($tdCol7);
+							$tr.append($tdCol8);
+							$tr.append($tdCol9);
+							$tbody.append($tr);
+						} 
+					} else {
+						$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
+
+					}	 		 
+				},error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});			
+			
+			
+			
+			
+		}
+		
+
 	}
 </script>
 <div class="detailView">
@@ -291,6 +364,7 @@
 					</label>
 					<form id="selectSearch" name="selectSearch" method="post"> 
 					<select class="form-control" id="sendTypeSelect">
+						<option value="ALL">전체</option>
 						<option value="SMS">SMS</option>
 						<option value="MMS">MMS</option>
 						<option value="VMS">VMS</option>

@@ -45,14 +45,14 @@
         WHERE t.reserved1 = u.reserved1
 	]]>
 	</select>
-	
+
 	<update id="updateSend">
 		UPDATE UMS_MSG_SEND
 		SET SUCCCNT =#{succ_total,jdbcType=VARCHAR}
 		,FAILCNT=#{fail_total,jdbcType=VARCHAR}
 		WHERE RESERVED1 = #{reserved1}
 	</update>
-	
+
 	<select id="sendList" resultType="SelectMsgDTO">
 		SELECT
 		MSGID
@@ -77,17 +77,17 @@
 		SELECT S.RESERVED1, R.MSG_ID ,R.SUCC_COUNT, R.FAIL_COUNT, D.MSG_ID ,D.DEST_NAME , D.PHONE_NUMBER,D.SEND_DATE, D.DELIVER_DATE , D.RESULT, D.TCS_RESULT
 		FROM SDK_SMS_REPORT_2101 R , SDK_SMS_REPORT_DETAIL_2101 D ,UMS_MSG_SEND S
 		WHERE R.MSG_ID=D.MSG_ID AND R.RESERVED1=S.RESERVED1 AND R.RESERVED1=#{msgid}
-	]]>	
+	]]>
 	</select>
-	
+
 	<select id="reportDeailJoinVMS" resultType="ReportDetailDTO">
 	<![CDATA[ 
 		SELECT S.RESERVED1, R.MSG_ID ,R.SUCC_COUNT, R.FAIL_COUNT, D.MSG_ID ,D.DEST_NAME , D.PHONE_NUMBER,D.SEND_DATE, D.RESULT, D.TCS_RESULT
 		FROM SDK_VMS_REPORT_2101 R , SDK_VMS_REPORT_DETAIL_2101 D ,UMS_MSG_SEND S
 		WHERE R.MSG_ID=D.MSG_ID AND R.RESERVED1=S.RESERVED1 AND R.RESERVED1=#{msgid}
-	]]>	
+	]]>
 	</select>
-	
+
 	<select id="destList" resultType="ReportDetailDestDTO">
 	<![CDATA[
 		SELECT 
@@ -100,12 +100,12 @@
 		WEHRE MSGID={msgid}
 	]]>
 	</select>
-	
+
 	<select id="destListCnt" resultType="int">
-	 SELECT COUNT(*) FROM UMS_DEST 
-	 WHERE MSGID=#{msgid}
-	</select> 
-	
+		SELECT COUNT(*) FROM UMS_DEST
+		WHERE MSGID=#{msgid}
+	</select>
+
 	<select id="reportDetailSend" resultType="ReportDetailSendDTO">
 	<![CDATA[ 
 	SELECT 
@@ -120,9 +120,9 @@
 	FROM UMS_MSG_SEND 
 	WHERE MSGID=#{msgid}
 	]]>
-	
+
 	</select>
-	<select id="sendTypeSearch" resultType="SelectMsgDTO">
+	<select id="sendTypeSearch" resultType="SearchDTO">
 	<![CDATA[
 	SELECT
 		MSGID
@@ -136,8 +136,30 @@
 		,FAILCNT
 		,RESERVED1
 		FROM UMS_MSG_SEND
-		WHERE SENDTYPE=#{semdtype}
+		WHERE SENDTYPE=#{sendtype}
 	]]>
 	</select>
-
+	<select id="sendTypeSelect" resultType="SearchDTO">
+	<![CDATA[
+	SELECT
+		MSGID
+		,SUBJECT
+		,SCHTYPE
+		,SENDDATE
+		,DEPARTNUM
+		,SENDTYPE
+		,MSGCNT
+		,SUCCCNT
+		,FAILCNT
+		,RESERVED1
+		FROM UMS_MSG_SEND
+		WHERE SENDTYPE=#{sendtype}
+	]]>
+	</select>
+	<select id="destListCntType" resultType="int">
+	<![CDATA[
+	SELECT COUNT(*) FROM UMS_MSG_SEND
+		WHERE SENDTYPE=#{sendtype}
+	]]>
+	</select>
 </mapper>

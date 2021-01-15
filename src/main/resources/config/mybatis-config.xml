@@ -11,5 +11,6 @@
 		<typeAlias alias="ReportDetailDTO" type="com.mono.ums.dto.ReportDetailDTO"/>
 		<typeAlias alias="ReportDetailDestDTO" type="com.mono.ums.dto.ReportDetailDestDTO"/>
 		<typeAlias alias="ReportDetailSendDTO" type="com.mono.ums.dto.ReportDetailSendDTO"/>
+		<typeAlias alias="SearchDTO" type="com.mono.ums.dto.SearchDTO"/>
 	</typeAliases>
 </configuration>

@@ -17,6 +17,12 @@ $(document).ready(function(){
 	});
 	$('#fileInput').on('change',readInputFile);
 });
+
+
+$(document).on('dblclick', '.imgPreview', function() {
+    $(this).remove(); fuindex--;
+});
+
 function readInputFile(e){
 	
     var sel_files = [];
@@ -29,7 +35,8 @@ function readInputFile(e){
     
     
     fileArr.forEach(function(f){
-    	if(filename.indexOf('.png') == -1){
+    	sptemp = filename.split('.');
+    	if(sptemp[sptemp.length-1] != "png") {
         	alert("[!] PNG확장자 파일만 업로드 가능 합니다.");
             return;
         };
@@ -39,7 +46,7 @@ function readInputFile(e){
             $('#imgPreviewCell').css('display','block');
             reader.onload = function(e){
             	if ( fuindex < 3 ) {
-                    $('#imgPreviewCell').append("<img class='imgPreview' src='" + e.target.result +"' />" )
+                    $('#imgPreviewCell').append("<div class='imgPreview'><i class='imgPreviewX fa fa-times' aria-hidden='true'></i><img src='" + e.target.result +"' /></div>" ) 
                     fuindex++;            		
             	} else {
             		alert("[!]최대 3장까지 업로드 할 수 있습니다.");
@@ -167,6 +174,7 @@ function schSendItems() {
 				<input id="subject" type="text" class="form-control" name="subject" />
 				<label>전송메시지</label>
 				<div id="imgPreviewCell">
+					
 				</div>
 				<textarea id="msgContent" class="form-control pb-2" rows="10" placeholder="문자 내용을 입력해주세요. (90Bytes 초과시 LMS로 전환)"></textarea>
 				<div>

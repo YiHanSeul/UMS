@@ -10,7 +10,7 @@ public interface MsgReportService {
 
 	Map<String, Object> reportDetailList(int msgid)throws Exception;
 	//전송타입에 따른 결과조회 select 
-	Map<String, Object> sendTypeSearch(int sendtype)throws Exception;
+	Map<String, Object> sendTypeSearch(String sendtype)throws Exception;
 
 
 }
