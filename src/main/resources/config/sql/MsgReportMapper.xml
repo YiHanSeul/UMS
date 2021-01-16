@@ -162,4 +162,18 @@
 		WHERE SENDTYPE=#{sendtype}
 	]]>
 	</select>
+	<delete id="cvsDelete">
+	DELETE FROM SDK_SMS_SEND
+	WHERE RESERVED1=#{msg_id}
+	</delete>
+	
+	<delete id="cvsDelete2">
+	DELETE FROM UMS_MSG_SEND
+	WHERE RESERVED1=#{msg_id}
+	</delete>
+	
+	<delete id="cvsDelete3">
+	DELETE FROM UMS_DEST
+	WHERE MSGID=#{msg_id}
+	</delete>
 </mapper>

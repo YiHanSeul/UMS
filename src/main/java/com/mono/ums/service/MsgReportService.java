@@ -12,5 +12,7 @@ public interface MsgReportService {
 	//전송타입에 따른 결과조회 select 
 	Map<String, Object> sendTypeSearch(String sendtype)throws Exception;
 
+	void cvsDelete(int msg_id);
+
 
 }

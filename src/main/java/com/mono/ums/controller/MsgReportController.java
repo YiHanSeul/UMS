@@ -41,7 +41,7 @@ public class MsgReportController {
 	// 발송된 메시지 조회
 	@RequestMapping("/reportList")
 	public @ResponseBody Map<String, Object> reportList(Model model) {
-		//System.out.println("컨털");
+		// System.out.println("컨털");
 		Map<String, Object> resultMap = null;
 		try {
 			resultMap = msgReportService.reportList(model);
@@ -53,18 +53,15 @@ public class MsgReportController {
 	}
 
 	// 발송된 메시지 세부조회
-	/*@RequestMapping("/reportDetailView")
-	public String reportDetailView(@RequestParam(value = "msgid") int msgid, Model model) {
-		System.out.println("여기 컨털임 msgid" + msgid);
-		model.addAttribute("msgid", msgid);
-		return "layout:view:msgreport/reportDetailView";
-
-	}*/
+	/*
+	 * @RequestMapping("/reportDetailView") public String reportDetailView(@RequestParam(value = "msgid") int msgid, Model model) {
+	 * System.out.println("여기 컨털임 msgid" + msgid); model.addAttribute("msgid", msgid); return "layout:view:msgreport/reportDetailView"; }
+	 */
 
 	// 발송된 메시지 개개인 수신자 목록 세부조회
 	@RequestMapping("/reportDetailList")
 	public @ResponseBody Map<String, Object> reportDetailList(int msgid, Model model, HttpServletResponse response, HttpServletRequest request) {
-		//System.out.println("티탸튜탸 부릉부릉이" + msgid);
+		// System.out.println("티탸튜탸 부릉부릉이" + msgid);
 		Map<String, Object> resultMap = null;
 		try {
 			resultMap = msgReportService.reportDetailList(msgid);
@@ -75,19 +72,31 @@ public class MsgReportController {
 		System.out.println(resultMap.toString());
 		return resultMap;
 	}
-	//전송타입에 따른 결과조회 select 
+
+	// 전송타입에 따른 결과조회 select
 	@RequestMapping("/sendTypeSearch")
-	public @ResponseBody Map<String, Object>  sendTypeSearch(String sendtype,Model model, HttpServletResponse response, HttpServletRequest request){
-	
-		Map<String,Object> resultMap=null;
-		System.out.println("컨털 : " +sendtype);
-		try{
-			resultMap=msgReportService.sendTypeSearch(sendtype);
-		}catch(Exception e){
-			
-		}System.out.println(resultMap);
+	public @ResponseBody Map<String, Object> sendTypeSearch(String sendtype, Model model, HttpServletResponse response, HttpServletRequest request) {
+
+		Map<String, Object> resultMap = null;
+		System.out.println("컨털 : " + sendtype);
+		try {
+			resultMap = msgReportService.sendTypeSearch(sendtype);
+		} catch (Exception e) {
+
+		}
+		System.out.println(resultMap);
 		return resultMap;
 	}
-	
+
+	@RequestMapping("/cvsDelete")
+	@ResponseBody
+	public void CvsDelete(int msg_id, HttpServletResponse response, HttpServletRequest request) {
+		try {
+			System.out.println("msg_id :" +msg_id);
+			msgReportService.cvsDelete(msg_id);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 
 }

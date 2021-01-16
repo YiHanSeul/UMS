@@ -46,6 +46,12 @@ public interface MsgReportMapper {
 
 	int destListCntType(String sendtype);
 
+	void cvsDelete(int msg_id);
+
+	void cvsDelete2(int msg_id);
+
+	void cvsDelete3(int msg_id);
+
 	
 
 	

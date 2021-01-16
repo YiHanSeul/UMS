@@ -75,6 +75,14 @@ public class MsgController {
 			// TODO: handle exception
 		}
 	}
+	@RequestMapping("/selectDeleteSendItem")
+	public void selectDeleteSendItem(int msg_id ,HttpServletResponse response,HttpServletRequest request){
+		try {
+			msgSendService.selectDeleteSendItem(msg_id);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	// 메시지 전송
 	@RequestMapping("/send")
 	public @ResponseBody Map<String, Object> send(Model model,SdkDTO sdkDTO,SendDTO sendDTO, HttpServletResponse response) {
@@ -130,18 +138,6 @@ public class MsgController {
 		Map<String, String> resultMap = null;
 		try {
 			resultMap = msgSendService.save(model);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// 어떠한 예외처리가 필요.
-		}
-		return resultMap;
-	}
-
-	@RequestMapping("/delete")
-	public @ResponseBody Map<String, String> delete(Model model, HttpServletResponse response) {
-		Map<String, String> resultMap = null;
-		try {
-			resultMap = msgSendService.delete(model);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 어떠한 예외처리가 필요.

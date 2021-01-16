@@ -91,6 +91,12 @@ public class MsgSendServiceImpl implements MsgSendService {
 		
 	}
 	@Override
+	public void selectDeleteSendItem(int msg_id) {
+		msgSendMapper.selectDeleteSendItem(msg_id);
+		
+	}
+
+	@Override
 	public Map<String, Object> send(Model model, SdkDTO sdkDTO, SendDTO sendDTO, HttpServletResponse response) throws Exception {
 		Map<String, Object> resultSend = new HashMap<String, Object>();
 		resultSend.put("RESULT_CODE", "1");
@@ -189,17 +195,9 @@ public class MsgSendServiceImpl implements MsgSendService {
 	}
 
 	@Override
-	public Map<String, String> delete(Model model) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setFormPage(Model model) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
-
-	
 
 }

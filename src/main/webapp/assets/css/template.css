@@ -253,3 +253,37 @@ h5 {
 	
 	
 }
+
+/*btn 스타일 수정 */
+#addBtn{
+	width: 130px;
+	height: 40px;
+	margin: auto;
+	font-size: 1.0em;
+	font-weight: bold;
+}
+#selectDelteBtn{
+	width: 130px;
+	height: 40px;
+	margin: auto;
+	font-size: 1.0em;
+	font-weight: bold;
+	padding: 3px;
+	
+}
+#delteBtn{
+	width: 130px;
+	height: 40px;
+	margin: auto;
+	font-size: 1.0em;
+	font-weight: bold;
+	padding: 3px;
+	background-color: #ff7575;
+	border-color: #ff7575;
+}
+#delteBtn:hover {
+	background-color: #ff4d4d;
+}
+
+
+

@@ -19,8 +19,6 @@ public interface MsgSendService {
 
 	Map<String, String> save(Model model) throws Exception;
 
-	Map<String, String> delete(Model model) throws Exception;
-
 	Map<String, String> addSendItem(Model model, DestTempDTO destTempDTO, HttpServletRequest req) throws Exception;
 
 	Map<String, Object> findSendItems(Model model) throws Exception;
@@ -30,6 +28,8 @@ public interface MsgSendService {
 	Map<String, Object> vmssend(Model model, SdkDTO sdkDTO, SdkDTO sdkDTO2, SendDTO sendDTO, HttpServletResponse response)throws Exception;
 
 	void deleteSendItem()throws Exception;
+	//수신자 별 선택 삭제 
+	void selectDeleteSendItem(int msg_id);
 
 	
 	

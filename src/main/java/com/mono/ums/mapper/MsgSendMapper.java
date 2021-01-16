@@ -39,5 +39,7 @@ public interface MsgSendMapper {
 
 	void deleteSendItem();
 
+	void selectDeleteSendItem(int msg_id);
+
 
 }

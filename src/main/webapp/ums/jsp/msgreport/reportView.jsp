@@ -2,6 +2,7 @@
 <script type="text/javascript">
 	var msgid = 0;
 	var splittemp;
+	var msg_id = 0;
 	$(document).ready(function() {
 		schReportItems();
 
@@ -37,118 +38,177 @@
 
 	function schReportItems() {
 		$.ajax({
-			type : 'POST',
-			url : '${contextPath}/ums/msgreport/reportList.json',
-			success : function(data) {
-				var $tbody = $("#sendlist");
+					type : 'POST',
+					url : '${contextPath}/ums/msgreport/reportList.json',
+					success : function(data) {
+						var $tbody = $("#sendlist");
 
-				$("#msgCnt").text("총" + data.MSG_CNT + "건");
-				if (data.MSG_CNT > 0) {
-					$tbody.html("");
-					var datesort = [];
-					for (var i = 0; i < data.LISTS.length; i++) {
-						datesort[i] = {
-							number: i,
-							time: parseInt(data.LISTS[i].senddate)
-						}
-					}
+						if (data.MSG_CNT > 0) {
+							$tbody.html("");
+							var datesort = [];
+							for (var i = 0; i < data.LISTS.length; i++) {
+								datesort[i] = {
+									number : i,
+									time : parseInt(data.LISTS[i].senddate)
+								}
+							}
+							var FilteringMsgcnt = 0;
+							datesort.sort(function(a, b) { //정렬하는거 
+								return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;
+							});
+							for (var i = 0; i < data.LISTS.length; i++) {
+								var lmmtemp = data.LISTS.length - 1 - i;
 
-					datesort.sort(function (a, b) {  //정렬하는거 
-						return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;  
-					});
+								if ((($('#sendTimeSelect').val() == 100) || (data.LISTS[datesort[lmmtemp]['number']].schtype == $('#sendTimeSelect')
+										.val()))
+										&& (($('#sendTypeSelect').val() == "ALL") || ($('#sendTypeSelect').val() == data.LISTS[datesort[lmmtemp]['number']].sendtype))) {
+									FilteringMsgcnt++;
+									var $tr = $("<tr id='trset_"+data.LISTS[datesort[lmmtemp]['number']].msgid+"'/>");
+									var $tdCol1 = $("<td />");
+									var $tdCol2 = $("<td />");
+									var $tdCol3 = $("<td />");
+									var $tdCol4 = $("<td />");
+									var $tdCol5 = $("<td />");
+									var $tdCol6 = $("<td />");
+									var $tdCol7 = $("<td />");
+									var $tdCol8 = $("<td />");
+									var $tdCol9 = $("<td />");
+									var $tdCol10 = $("<td />");
 
-					
-					 for (var i = 0; i < data.LISTS.length; i++) {
-						var lmmtemp = data.LISTS.length-1-i;
-						var $tr = $("<tr id='trset_"+data.LISTS[datesort[lmmtemp]['number']].msgid+"'/>");
-						var $tdCol1 = $("<td />");
-						var $tdCol2 = $("<td />");
-						var $tdCol3 = $("<td />");
-						var $tdCol4 = $("<td />");
-						var $tdCol5 = $("<td />");
-						var $tdCol6 = $("<td />");
-						var $tdCol7 = $("<td />");
-						var $tdCol8 = $("<td />");
-						var $tdCol9 = $("<td />");
-						var $tdCol10= $("<td />");
-						
-						$tdCol1.text(lmmtemp+1);
-						$tdCol2.text(data.LISTS[datesort[lmmtemp]['number']].subject);
-						if (data.LISTS[i].schtype == 0) {
-							$tdCol3.text('즉시전송');
+									$tdCol1.text(lmmtemp + 1);
+									$tdCol2.text(data.LISTS[datesort[lmmtemp]['number']].subject);
+									if (data.LISTS[datesort[lmmtemp]['number']].schtype == 0) {
+										$tdCol3.text('즉시전송');
+									} else {
+										$tdCol3.text('예약전송');
+									}
+									var prettydate = "";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(0, 4) + "-";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(4, 6) + "-";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(6, 8) + " ";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(8, 10) + ":";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
+									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(12, 14);
+									$tdCol4.text(prettydate);
+									$tdCol5.text(phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1));
+
+									$tdCol6.text(data.LISTS[datesort[lmmtemp]['number']].sendtype);
+									$tdCol7.text(data.LISTS[datesort[lmmtemp]['number']].msgcnt);
+									$tdCol8.text(data.LISTS[datesort[lmmtemp]['number']].succcnt);
+									$tdCol9.text(data.LISTS[datesort[lmmtemp]['number']].failcnt);
+
+									var succ = data.LISTS[datesort[lmmtemp]['number']].succcnt;
+									var fail = data.LISTS[datesort[lmmtemp]['number']].failcnt;
+									if ((succ + fail) == 0) {
+										$tdCol10.text("전송 대기");
+									} else if (succ == 0 && fail > 0) {
+										$tdCol10.text("전송 실패");
+									} else {
+										$tdCol10.text("전송 완료");
+									}
+
+									$tr.append($tdCol1);
+									$tr.append($tdCol2);
+									$tr.append($tdCol3);
+									$tr.append($tdCol4);
+									$tr.append($tdCol5);
+									$tr.append($tdCol6);
+									$tr.append($tdCol7);
+									$tr.append($tdCol8);
+									$tr.append($tdCol9);
+									$tr.append($tdCol10);
+									$tbody.append($tr);
+
+								}
+
+							}
+							$("#msgCnt").text("총" + FilteringMsgcnt + "건");
+							if (FilteringMsgcnt == 0) {
+								$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
+							}
+
 						} else {
-							$tdCol3.text('예약전송');
-						}
-						var prettydate = "";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(0, 4) + "-";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(4, 6) + "-";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(6, 8) + " ";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(8, 10) + ":";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
-						prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(12, 14);
-						$tdCol4.text(prettydate);
-						$tdCol5.text(phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1));
+							$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
 
-						$tdCol6.text(data.LISTS[datesort[lmmtemp]['number']].sendtype);
-						$tdCol7.text(data.LISTS[datesort[lmmtemp]['number']].msgcnt);
-						$tdCol8.text(data.LISTS[datesort[lmmtemp]['number']].succcnt);
-						$tdCol9.text(data.LISTS[datesort[lmmtemp]['number']].failcnt);
-						
-						var succ =data.LISTS[datesort[lmmtemp]['number']].succcnt;
-						var fail =data.LISTS[datesort[lmmtemp]['number']].failcnt;
-						if(succ == null && fail == null){
-							$tdCol10.text("전송 대기중");
-						}else{
-							$tdCol10.text("전송 완료");
 						}
 
-						$tr.append($tdCol1);
-						$tr.append($tdCol2);
-						$tr.append($tdCol3);
-						$tr.append($tdCol4);	
-						$tr.append($tdCol5);
-						$tr.append($tdCol6);
-						$tr.append($tdCol7);
-						$tr.append($tdCol8);
-						$tr.append($tdCol9);
-						$tr.append($tdCol10);
-						$tbody.append($tr);
- 
-					} 
-				} else {
-					$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
+					},
+					complete : function(data) {
 
-				}
-
-			},
-			complete : function(data) {
-
-			},
-			error : function(request, status, error) {
-				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-			}
-		});
+					},
+					error : function(request, status, error) {
+						alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+					}
+				});
 	}
+
+	//예약전송 메시지 아직 발송 안한거 삭제시키는 함수
+	function CvsDelete(msgid) {
+		msg_id = msgid; 
+		swal({
+		    title: "예약 문자 삭제",
+		    text: "해당 예약 문자를\n삭제 하시겠습니까?",
+		    icon: "warning",
+		    buttons: ["아니오", "예"]
+		}).then((YES) => {
+		    if (YES) {
+		    	var msgObj = {
+		    		msg_id : msg_id
+		    		
+		    	};
+
+				$.ajax({
+				type : 'POST',
+				url : '${contextPath}/ums/msgreport/cvsDelete.json',
+				data:msgObj,
+				success : function(data) {
+					swal("예약메시지가 삭제 완료.", "success");
+					schReportItems();
+					$(".detailViewIn").css("display", "none");
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});		        
+		        
+		    }else{
+		    	
+		    }
+		});
+
+		
+		
+		
+
+
+
+	}
+
 	//상세내역 조회 페이지 나옴 
 	$(document).on('click', '#sendlist tr', function() {
 		msgid = $(this).attr('id') + "";
 		splittemp = msgid.split('trset_');
 		$(".detailViewIn").css("display", "block");
-		destSelectItems();
-		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
-
-
+		if ($(this).children(":eq(-1)").text() == "전송 대기") {
+			var schtype = false;
+		} else {
+			var schtype = true;
+		}
+		destSelectItems(schtype);
+		$("html, body").animate({
+			scrollTop : $(document).height()
+		}, 1000);
 	});
-	function destSelectItems() {
+	function destSelectItems(schtypeVar) {
 
 		//var dsitemp = window.location.href.split('msgid=')
 		//var msgid =  parseInt(dsitemp[1]);
 		//alert(msgid);
-		
+
 		var data = {
 			msgid : parseInt(splittemp[1])
 		};
-		
+
 		$.ajax({
 			type : 'POST',
 			data : data,
@@ -156,15 +216,39 @@
 			success : function(data) {
 				//alert(data.SENDLISTS.length);
 				var $tbody = $("#destlist");
+				$("#destViewBtnList").children(":eq(1)").remove();
 				$("#destCnt").text("총" + data.DEST_CNT + "명");
 				if (data.DEST_CNT > 0) {
 					$tbody.html("");
 					$("#subject").val(data.SENDLISTS[0].subject);
 					$("#msg_content").val(data.SENDLISTS[0].msgcontent);
 					$("#send_type").val(data.SENDLISTS[0].sendtype);
-					$("#dest_num").val(phoneFomatter(data.SENDLISTS[0].departnum,1));		
-
+					$("#dest_num").val(phoneFomatter(data.SENDLISTS[0].departnum, 1));
 					var looptime = eval("data.LISTS" + data.SENDLISTS[0].sendtype + ".length");
+
+					var prettydate1 = "";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(0, 4) + "-";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(4, 6) + "-";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(6, 8) + " ";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(8, 10) + ":";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(10, 12) + ":";
+					prettydate1 += data.SENDLISTS[0].nowdate.substring(12, 14);
+					$("#now_date").val(prettydate1);
+					var prettydate2 = "";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(0, 4) + "-";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(4, 6) + "-";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(6, 8) + " ";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(8, 10) + ":";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(10, 12) + ":";
+					prettydate2 += data.SENDLISTS[0].senddate.substring(12, 14);
+					if (schtypeVar == false) {
+						$("#destViewBtnList").append(
+								'<input class="CvsDeleteBtn btn btn-primary float-right" type="button" onclick="CvsDelete(' + parseInt(splittemp[1])
+										+ ')" value="예약 전송 취소" />');
+					}
+					$("#send_date").val(prettydate2);
+					$("#attach_file").val(data.SENDLISTS[i].attachfile);
+
 					for (var i = 0; i < looptime; i++) {
 						var $tr = $("<tr />");
 						var $tdCol1 = $("<td />");
@@ -174,28 +258,26 @@
 						var $tdCol5 = $("<td />");
 						var $tdCol6 = $("<td />");
 
-						$tdCol1.text(i+1);
-						$tdCol2.text(eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].dest_name"));
-						pfnum = eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].phone_number");
-						$tdCol3.text(phoneFomatter(pfnum,1));
+						$tdCol1.text(i + 1);
+						$tdCol2.text(eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].dest_name"));
+						pfnum = eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].phone_number");
+						$tdCol3.text(phoneFomatter(pfnum, 1));
 						var prettydate = "";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(0, 4)") + "-";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(4, 6)") + "-";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(6, 8)") + " ";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(8, 10)") + ":";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(10, 12)") + ":";
-						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].send_date.substring(12, 14)");
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(0, 4)") + "-";
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(4, 6)") + "-";
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(6, 8)") + " ";
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(8, 10)") + ":";
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(10, 12)") + ":";
+						prettydate += eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].send_date.substring(12, 14)");
 						$tdCol4.text(prettydate);
-						
-						
-						
-						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].succ_count") == 1) {
+
+						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].succ_count") == 1) {
 							$tdCol5.text("성공");
 						} else {
 							$tdCol5.text("실패");
 						}
 
-						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "["+ i + "].fail_count") == 1) {
+						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].fail_count") == 1) {
 							$tdCol6.text("실패사유 ");
 						} else {
 							$tdCol6.text("");
@@ -208,27 +290,7 @@
 						$tr.append($tdCol6);
 
 						$tbody.append($tr);
-						
 
-						var prettydate1 = "";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(0, 4) + "-";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(4, 6) + "-";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(6, 8) + " ";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(8, 10) + ":";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(10, 12) + ":";
-						prettydate1 += data.SENDLISTS[i].nowdate.substring(12, 14);
-						$("#now_date").val(prettydate1);
-						var prettydate2 = "";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(0, 4) + "-";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(4, 6) + "-";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(6, 8) + " ";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(8, 10) + ":";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(10, 12) + ":";
-						prettydate2 += data.SENDLISTS[i].senddate.substring(12, 14);
-						
-						$("#send_date").val(prettydate2);
-						$("#attach_file").val(data.SENDLISTS[i].attachfile);
-						
 					}
 				} else {
 					$tbody.html("<tr><td colspan=\"7\" class=\"text-center\">전송한 메시지 수신자가 없습니다.</td></tr>");
@@ -237,109 +299,18 @@
 
 		});
 	}
-	function sendSelectItems(){
+	function sendSelectItems() {
 		var data = {
-				msgid : parseInt(splittemp[1])
-			};
+			msgid : parseInt(splittemp[1])
+		};
 		$.ajax({
 			type : 'POST',
 			data : data,
 			url : '${contextPath}/ums/msgreport/reportDetailSend.json',
 			success : function(data) {
-				
+
 			},
 		});
-	}
-	function search(){
-		if ( $("#sendTypeSelect").val() == "ALL") {
-			 schReportItems();
-		}else{
-			var data = {
-					sendtype: $("#sendTypeSelect").val()
-				};
-			$.ajax({
-				type : 'POST',
-				data: data,
-				url : '${contextPath}/ums/msgreport/sendTypeSearch.json',
-				success:function(data){
-					var $tbody = $("#sendlist");
-					$tbody.children().remove();
-					$("#msgCnt").text("총" + data.DEST_CNT + "건");
-					if (data.DEST_CNT > 0) {
-						$tbody.html("");
-						var datesort = [];
-						for (var i = 0; i < data.sendType.length; i++) {
-							datesort[i] = {
-								number: i,
-								time: parseInt(data.sendType[i].senddate)
-							}
-						}
-
-						datesort.sort(function (a, b) {  //정렬하는거 
-							return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;  
-						});
-
-						 
-						 for (var i = 0; i < data.sendType.length; i++) {
-							var lmmtemp = data.sendType.length-1-i;
-							var $tr = $("<tr id='trset_"+data.sendType[datesort[lmmtemp]['number']].msgid+"'/>");
-							var $tdCol1 = $("<td />");
-							var $tdCol2 = $("<td />");
-							var $tdCol3 = $("<td />");
-							var $tdCol4 = $("<td />");
-							var $tdCol5 = $("<td />");
-							var $tdCol6 = $("<td />");
-							var $tdCol7 = $("<td />");
-							var $tdCol8 = $("<td />");
-							var $tdCol9 = $("<td />");
-							$tdCol1.text(lmmtemp+1);
-							$tdCol2.text(data.sendType[datesort[lmmtemp]['number']].subject);
-							if (data.sendType[i].schtype == 0) {
-								$tdCol3.text('즉시전송');
-							} else {
-								$tdCol3.text('예약전송');
-							}
-							var prettydate = "";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(0, 4) + "-";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(4, 6) + "-";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(6, 8) + " ";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(8, 10) + ":";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
-							prettydate += data.sendType[datesort[lmmtemp]['number']].senddate.substring(12, 14);
-							$tdCol4.text(prettydate);
-							$tdCol5.text(phoneFomatter(data.sendType[datesort[lmmtemp]['number']].departnum, 1));
-
-							$tdCol6.text(data.sendType[datesort[lmmtemp]['number']].sendtype);
-							$tdCol7.text(data.sendType[datesort[lmmtemp]['number']].msgcnt);
-							$tdCol8.text(data.sendType[datesort[lmmtemp]['number']].succcnt);
-							$tdCol9.text(data.sendType[datesort[lmmtemp]['number']].failcnt);
-
-							$tr.append($tdCol1);
-							$tr.append($tdCol2);
-							$tr.append($tdCol3);
-							$tr.append($tdCol4);	
-							$tr.append($tdCol5);
-							$tr.append($tdCol6);
-							$tr.append($tdCol7);
-							$tr.append($tdCol8);
-							$tr.append($tdCol9);
-							$tbody.append($tr);
-						} 
-					} else {
-						$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
-
-					}	 		 
-				},error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});			
-			
-			
-			
-			
-		}
-		
-
 	}
 </script>
 <div class="detailView">
@@ -372,23 +343,24 @@
 					<label>
 						<i class="fa fa-commenting-o title-font" aria-hidden="true"></i> 메시지 유형
 					</label>
-					<form id="selectSearch" name="selectSearch" method="post"> 
-					<select class="form-control" id="sendTypeSelect">
-						<option value="ALL">전체</option>
-						<option value="SMS">SMS</option>
-						<option value="MMS">MMS</option>
-						<option value="VMS">VMS</option>
-						<option value="FMS">FMS</option>
-					</select>
+					<form id="selectSearch" name="selectSearch" method="post">
+						<select class="form-control" id="sendTypeSelect" onchange="schReportItems()">
+							<option value="ALL">전체</option>
+							<option value="SMS">SMS</option>
+							<option value="MMS">MMS</option>
+							<option value="VMS">VMS</option>
+							<option value="FMS">FMS</option>
+						</select>
 					</form>
 				</div>
 				<div class="col-6">
 					<label>
 						<i class="fa fa-clock-o title-font" aria-hidden="true"></i> 예약전송 유무
 					</label>
-					<select class="form-control">
-						<option>즉시전송</option>
-						<option>예약전송</option>
+					<select class="form-control" id="sendTimeSelect" " onchange="schReportItems()">
+						<option value="100">전체</option>
+						<option value="0">즉시전송</option>
+						<option value="1">예약전송</option>
 					</select>
 				</div>
 			</div>
@@ -411,7 +383,7 @@
 								</div>
 								<input type="text" class="form-control" placeholder="검색 키워드를 입력하세요!">
 								<span class="input-group-btn">
-									<button class="btn btn-primary" type="button" onclick="search()">찾기</button>
+									<button class="btn btn-primary" type="button">찾기</button>
 								</span>
 							</div>
 						</div>
@@ -540,8 +512,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-12 float-right">
-			<input class="btn btn-primary float-right" type="button" onclick="$('.detailViewIn').css('display','none')" value="닫기" />
+		<div id="destViewBtnList" class="col-lg-12 float-right">
+			<input class="btn btn-primary float-right ml-4" type="button" onclick="$('.detailViewIn').css('display','none')" value="닫기" />
+
 		</div>
 	</div>
 </div>

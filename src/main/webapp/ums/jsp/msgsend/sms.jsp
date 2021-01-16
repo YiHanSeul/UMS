@@ -130,8 +130,8 @@
 			});
 		}
 	}
-	function deleteSendItem(){
-		if(confirm("대상자를 전체 삭제하시겠습니까?"))
+	function deleteSendItem() {
+		if (confirm("대상자를 전체 삭제하시겠습니까?"))
 			$.ajax({
 				type : "POST",
 				url : '${contextPath}/ums/msgsend/deleteSendItem',
@@ -146,25 +146,48 @@
 				}
 			});
 	}
+	function selectDelteBtn(){ 
+		if(confirm("대상자를 선택 삭제하시겠습니까?"))
+			$.ajax({
+				type : "POST",
+				url : '${contextPath}/ums/msgsend/selectDeleteSendItem',
+				data: msg_id,
+				success : function(data) {
+					schSendItems();
+				},
+				complete : function(data) {
+
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			});
+			
+	}
 	function send() {
 		var msgCnt = $('#receiveList tr').last().find("td").eq(0).text();
 		var schType = $("input[name='radio']:checked").val();
 		if (schType) {
+			var cvsDateAry = $("#Date").val().split("-");
+			var cvsDate = cvsDateAry[0]+cvsDateAry[1]+cvsDateAry[2];
+			var cvsTimeAry = $("#Time").val().split(":");
+			cvsDate += cvsTimeAry[0]; cvsDate += cvsTimeAry[1]; cvsDate += "00";
 			console.log($("#subject").val());
 			console.log($("#msgContent").val());
 			console.log($("#departNum").val());
 			console.log($('#radio-value:checked').val());
-			console.log($("#Date").val() + " " + $("#Time").val());
+			console.log("CVSDATE = " + cvsDate);			
 			console.log(msgCnt);
 			console.log(schType);
 			if (confirm("메시지를 전송하시 겠습니까?")) {
+
 				var send = {
 
 					subject : $("#subject").val(),
 					msgContent : $("#msgContent").val(),
 					departNum : $("#departNum").val(),
 					schType : schType,
-					sendDate : $("#Date").val() + " " + $("#Time").val(),
+					sendDate : cvsDate,
 					msgCnt : msgCnt
 				}
 				$.ajax({
@@ -355,6 +378,9 @@
 					</tbody>
 				</table>
 				<div class="col-12 text-right">
+					<div class="btn-group">
+						<button id="selectDelteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="selectDelteBtn()">수신자 선택 삭제</button>
+					</div>
 					<div class="btn-group">
 						<button id="delteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="deleteSendItem()">수신자 전체 삭제</button>
 					</div>

@@ -87,4 +87,13 @@ public class MsgReportServiceImpl implements MsgReportService {
 		return resultMap;
 	}
 
+	@Override
+	public void cvsDelete(int msg_id) {
+		msgReportMapper.cvsDelete(msg_id);
+		msgReportMapper.cvsDelete3(msg_id);
+		msgReportMapper.cvsDelete2(msg_id);
+		
+		
+	}
+
 }
