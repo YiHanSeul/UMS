@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
+	var ListCheck = false;
+	var ListSelCnt = 0;
 	$(document).ready(function() {
 		schSendItems();
 		$("#msgContent").keyup(function() {
@@ -18,8 +20,38 @@
 			}
 			$('#nowdanjang').text(getByteB(mctemp) + '/2000 Bytes');
 		});
+		$(document).on('click', '#receiveList tr', function() {
+			//alert($(this).css("backgroundColor"));
+			if (ListCheck) {
+				if ($(this).css("backgroundColor") == "rgb(255, 117, 117)") {
+					$(this).css("backgroundColor","#ffffff");
+					ListSelCnt--;
+					ListSelCntRf()
+					
+					
+				}else {
+					$(this).css("backgroundColor","#ff7575");
+					ListSelCnt++;
+					ListSelCntRf()
+				}
+				
+				//UserID = $(this).attr('id').split("_");
+				
+			}
+
+		});		
+		
+		
+		
+		
+		
+		
 
 	});
+	function ListSelCntRf(){
+		var strtemp= $("#totalCnt").text().split('  [');
+		$("#totalCnt").text(strtemp[0]+"  [ "+ ListSelCnt +"명 선택됨 ]");			
+	}
 
 	function phoneFomatter(num, type) {
 		var formatNum = '';
@@ -56,12 +88,11 @@
 			data : $("#sendItemFrm").serialize(),
 			success : function(data) {
 				var $tbody = $("#receiveList");
-
-				$("#totalCnt").text("총" + data.TOTAL_CNT + "건");
+				$("#totalCnt").text("총" + data.TOTAL_CNT + "명");
 				if (data.TOTAL_CNT > 0) {
 					$tbody.html("");
 					for (var i = 0; i < data.LIST.length; i++) {
-						var $tr = $("<tr />");
+						var $tr = $("<tr id='UserID_" + data.LIST[i].MSG_ID +"'/>");
 						var $tdCol1 = $("<td />");
 						var $tdCol2 = $("<td />");
 						var $tdCol3 = $("<td />");
@@ -117,7 +148,7 @@
 							$(this).val("");
 						});
 					} else {
-						swal("수신대상등록에 실패하였습니다.", "", "danger");
+						swal("수신대상등록에 실패하였습니다.", "", "warning");
 					}
 					schSendItems();
 				},
@@ -147,21 +178,85 @@
 			});
 	}
 	function selectDelteBtn(){ 
-		if(confirm("대상자를 선택 삭제하시겠습니까?"))
-			$.ajax({
-				type : "POST",
-				url : '${contextPath}/ums/msgsend/selectDeleteSendItem',
-				data: msg_id,
-				success : function(data) {
-					schSendItems();
-				},
-				complete : function(data) {
+		if (ListCheck) {
+			if (ListSelCnt < 1) {
+				swal("수신자 삭제 실패.", "삭제할 수신자가 선택되지 않았습니다.", 'warning');
+				$('#receiveList tr').css("backgroundColor","#ffffff");
+				var strtemp= $("#totalCnt").text().split('  [');
+				$("#totalCnt").text(strtemp[0]);	
+				$("#selectDelteBtn").text("삭제할 수신자 선택");		
+				ListSelCnt=0;
+				ListCheck=false;
+			} else {
+				swal({
+				    title: "선택 수신자 삭제",
+				    text: "선택된" + ListSelCnt +"명의\n수신자를 삭제 하시겠습니까?",
+				    icon: "warning",
+				    buttons: ["아니오", "예"]
+				}).then((YES) => {
+				    if (YES) {
+				    	ListCheck = false;
+				    	ListSelCnt=0;
+				    	//var dataList = $('#receiveList tr').css("backgroundColor","#ffffff");
+				    	var loopcnt = 0;
+				    	var dellist= [];
+				    	for ( i = 0 ; i < $('#receiveList').children().length ; i++) {
+				    		if ($("#receiveList").children(":eq("+i+")").css('backgroundColor') =="rgb(255, 117, 117)") {
+				    			console.log($("#receiveList").children(":eq("+i+")").attr('id'));
+				    			dellist[loopcnt] = $("#receiveList").children(":eq("+i+")").attr('id').split('_')[1];
+				    			loopcnt++;
+				    		}
+				    	}
+						$.ajax({
+							
+							type : "POST",
+							url : '${contextPath}/ums/msgsend/selectDeleteSendItem',
+							data: {
+								'data' : dellist
+							},
+							traditional : true,
+							success : function(data) {
+								schSendItems();
+							},
+							complete : function(data) {
 
-				},
-				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
+							},
+							error : function(request, status, error) {
+								alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+							}
+						});
+				    	
+				    	
+				    	
+				    	
+				    	
+				    }else{
+						ListCheck = false;
+						ListSelCnt=0;
+						$('#receiveList tr').css("backgroundColor","#ffffff");
+						var strtemp= $("#totalCnt").text().split('  [');
+						$("#totalCnt").text(strtemp[0]);	
+						$("#selectDelteBtn").text("삭제할 수신자 선택");	
+				    	
+				    }
+				});							
+			
+			}
+		}else {
+			ListCheck = true;
+			ListSelCnt=0;
+			var strtemp = $("#totalCnt").text();
+			$("#totalCnt").text(strtemp+"  [ 0명 선택됨 ]");
+			$("#selectDelteBtn").text("클릭시 삭제 혹은 취소");			
+		}
+		
+
+
+			
+			
+			
+			
+
 			
 	}
 	function send() {
@@ -199,6 +294,7 @@
 							swal("메시지 전송이 완료되었습니다.", "success");
 							$("#sendMsgFrm").find("input").each(function() {
 								$(this).val("");
+								
 							});
 						} else {
 							swal("메시지 전송을 실패했습니다. ", "danger");
@@ -379,7 +475,7 @@
 				</table>
 				<div class="col-12 text-right">
 					<div class="btn-group">
-						<button id="selectDelteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="selectDelteBtn()">수신자 선택 삭제</button>
+						<button id="selectDelteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="selectDelteBtn()">삭제할 수신자 선택</button>
 					</div>
 					<div class="btn-group">
 						<button id="delteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="deleteSendItem()">수신자 전체 삭제</button>

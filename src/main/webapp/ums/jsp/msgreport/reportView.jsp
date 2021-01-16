@@ -3,10 +3,63 @@
 	var msgid = 0;
 	var splittemp;
 	var msg_id = 0;
+	var SbjList = [];
+	var NumList = [];
+	var FilteringMsgcnt = 0;
+	var SchFinCnt = 0;
+	var FtrStartDate = "0";
+	var FtrEndDate = "0";
+	//SchBoxType 검색할 타입 슨택하는거
 	$(document).ready(function() {
 		schReportItems();
-
+		$("#searchBox").keyup(function() {
+			var schtext = $("#searchBox").val();
+			if (schtext == "") {
+				$("#msgCnt").text("총" + SbjList.length + "건");
+				$("#sendlist tr").removeAttr('SchCom')
+				$("#sendlist tr").css('display', 'block')
+				
+			}else if ($('#SchBoxType').val() == "Sbj") {
+				SchFinCnt = 0;
+				for ( j = 1 ; j < SbjList.length ; j++) {
+					strtemp = ""+SbjList[j];
+					strtemp = strtemp.toLowerCase();
+					if (strtemp.indexOf(schtext.toLowerCase()) != -1) {
+						$("#sendlist tr:eq("+ (j-1) +")").attr('SchCom', 'true')
+						$("#sendlist tr:eq("+ (j-1) +")").css('display', 'block')
+						SchFinCnt++;
+					} else {
+						$("#sendlist tr:eq("+ (j-1) +")").attr('SchCom', 'false')
+						$("#sendlist tr:eq("+ (j-1) +")").css('display', 'none')
+					}
+				}
+				$("#msgCnt").text("총" + SchFinCnt + "건");
+				
+			} else {
+				SchFinCnt = 0;
+				for ( j = 1 ; j < NumList.length ; j++) {
+					strtemp = ""+NumList[j];
+					strtemp = strtemp;
+					if (strtemp.indexOf(schtext) != -1) {
+						$("#sendlist tr:eq("+ (j-1) +")").attr('SchCom', 'true')
+						$("#sendlist tr:eq("+ (j-1) +")").css('display', 'block')
+						SchFinCnt++;
+					} else {
+						$("#sendlist tr:eq("+ (j-1) +")").attr('SchCom', 'false')
+						$("#sendlist tr:eq("+ (j-1) +")").css('display', 'none')
+					}
+				}
+				$("#msgCnt").text("총" + SchFinCnt + "건");
+								
+				
+			}
+			
+			
+		});	
+		
 	});
+
+	
 
 	function phoneFomatter(num, type) {
 		var formatNum = '';
@@ -36,6 +89,33 @@
 		return formatNum;
 	}
 
+	
+	function dateFilter(ResetType) {
+		if (ResetType) {
+			$("#startDate, #endDate").val('');
+			FtrStartDate = "0";
+			FtrEndDate = "0";			
+			schReportItems();
+			$("#dateResetBtn").css('display','none');
+		}else if ($("#startDate").val() != "" && $("#endDate").val() != "") {
+			FtrStartDate = $("#startDate").val().split("-")[0] + $("#startDate").val().split("-")[1] + $("#startDate").val().split("-")[2]
+			FtrEndDate = $("#endDate").val().split("-")[0] + $("#endDate").val().split("-")[1] + $("#endDate").val().split("-")[2]
+			if ( parseInt(FtrStartDate) >= parseInt(FtrEndDate) ) {
+				swal("날짜 지정 실패", "시작 날짜가 종료 날짜보다\n너무 먼 미래입니다", "warning");
+				$("#startDate, #endDate").val('');
+				FtrStartDate = "0";
+				FtrEndDate = "0";
+			} else {
+				$('#searchBox').val('');
+				$("#dateResetBtn").css('display','block');	
+				schReportItems(); 
+				
+			}
+		}
+
+	}
+	
+	
 	function schReportItems() {
 		$.ajax({
 					type : 'POST',
@@ -52,17 +132,18 @@
 									time : parseInt(data.LISTS[i].senddate)
 								}
 							}
-							var FilteringMsgcnt = 0;
+							FilteringMsgcnt = 0;
 							datesort.sort(function(a, b) { //정렬하는거 
 								return a.time < b.time ? -1 : a.time > b.time ? 1 : 0;
 							});
 							for (var i = 0; i < data.LISTS.length; i++) {
 								var lmmtemp = data.LISTS.length - 1 - i;
-
-								if ((($('#sendTimeSelect').val() == 100) || (data.LISTS[datesort[lmmtemp]['number']].schtype == $('#sendTimeSelect')
+								
+								if ( ( (FtrStartDate == "0") || ((FtrStartDate <= data.LISTS[datesort[lmmtemp]['number']].senddate.substring(0, 8)) && (FtrEndDate >= data.LISTS[datesort[lmmtemp]['number']].senddate.substring(0, 8))) ) &&(($('#sendTimeSelect').val() == 100) || (data.LISTS[datesort[lmmtemp]['number']].schtype == $('#sendTimeSelect')
 										.val()))
 										&& (($('#sendTypeSelect').val() == "ALL") || ($('#sendTypeSelect').val() == data.LISTS[datesort[lmmtemp]['number']].sendtype))) {
 									FilteringMsgcnt++;
+									console.log();
 									var $tr = $("<tr id='trset_"+data.LISTS[datesort[lmmtemp]['number']].msgid+"'/>");
 									var $tdCol1 = $("<td />");
 									var $tdCol2 = $("<td />");
@@ -118,6 +199,9 @@
 									$tr.append($tdCol9);
 									$tr.append($tdCol10);
 									$tbody.append($tr);
+									SbjList[FilteringMsgcnt] = data.LISTS[datesort[lmmtemp]['number']].subject;
+									NumList[FilteringMsgcnt] = phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1);
+									
 
 								}
 
@@ -143,6 +227,11 @@
 	}
 
 	//예약전송 메시지 아직 발송 안한거 삭제시키는 함수
+	
+	
+	
+	
+	
 	function CvsDelete(msgid) {
 		msg_id = msgid; 
 		swal({
@@ -217,14 +306,15 @@
 				//alert(data.SENDLISTS.length);
 				var $tbody = $("#destlist");
 				$("#destViewBtnList").children(":eq(1)").remove();
-				$("#destCnt").text("총" + data.DEST_CNT + "명");
-				if (data.DEST_CNT > 0) {
+				
+				var looptime = eval("data.LISTS" + data.SENDLISTS[0].sendtype + ".length");
+				$("#destCnt").text("총" + looptime + "명");
+				if (looptime > 0) {
 					$tbody.html("");
 					$("#subject").val(data.SENDLISTS[0].subject);
 					$("#msg_content").val(data.SENDLISTS[0].msgcontent);
 					$("#send_type").val(data.SENDLISTS[0].sendtype);
 					$("#dest_num").val(phoneFomatter(data.SENDLISTS[0].departnum, 1));
-					var looptime = eval("data.LISTS" + data.SENDLISTS[0].sendtype + ".length");
 
 					var prettydate1 = "";
 					prettydate1 += data.SENDLISTS[0].nowdate.substring(0, 4) + "-";
@@ -247,7 +337,7 @@
 										+ ')" value="예약 전송 취소" />');
 					}
 					$("#send_date").val(prettydate2);
-					$("#attach_file").val(data.SENDLISTS[i].attachfile);
+					$("#attach_file").val(data.SENDLISTS[0].attachfile);
 
 					for (var i = 0; i < looptime; i++) {
 						var $tr = $("<tr />");
@@ -322,17 +412,20 @@
 		</div>
 		<div class="col-lg-4 pt-2">
 			<div class="row">
-				<div class="col-6">
+				<div class="col-5">
 					<label>
 						<i class="fa fa-calendar-o title-font" aria-hidden="true"> </i> 전송기간(시작)
 					</label>
-					<input type="date" id="startDate" class="form-control">
+					<input type="date" id="startDate" class="form-control" onchange="dateFilter(false)">
 				</div>
-				<div class="col-6">
+				<div class="col-5">
 					<label>
 						<i class="fa fa-calendar-o title-font" aria-hidden="true"></i> 전송기간(종료)
 					</label>
-					<input type="date" id="endDate" class="form-control">
+					<input type="date" id="endDate" class="form-control" onchange="dateFilter(false)">
+				</div>
+				<div id="dateResetDiv" class="col-2">
+					<input class="btn btn-primary" id="dateResetBtn" type="button" onclick="dateFilter(true)" value="초기화" />
 				</div>
 			</div>
 		</div>
@@ -344,7 +437,7 @@
 						<i class="fa fa-commenting-o title-font" aria-hidden="true"></i> 메시지 유형
 					</label>
 					<form id="selectSearch" name="selectSearch" method="post">
-						<select class="form-control" id="sendTypeSelect" onchange="schReportItems()">
+						<select class="form-control" id="sendTypeSelect" onchange="schReportItems();$('#searchBox').val('');">
 							<option value="ALL">전체</option>
 							<option value="SMS">SMS</option>
 							<option value="MMS">MMS</option>
@@ -357,7 +450,7 @@
 					<label>
 						<i class="fa fa-clock-o title-font" aria-hidden="true"></i> 예약전송 유무
 					</label>
-					<select class="form-control" id="sendTimeSelect" " onchange="schReportItems()">
+					<select class="form-control" id="sendTimeSelect" " onchange="schReportItems();$('#searchBox').val('');">
 						<option value="100">전체</option>
 						<option value="0">즉시전송</option>
 						<option value="1">예약전송</option>
@@ -375,16 +468,12 @@
 						<div class="col-12">
 							<div class="input-group">
 								<div class="input-group-btn search-panel">
-									<select class="form-control">
-										<option>제목</option>
-										<option>이름</option>
-										<option>발신번호</option>
+									<select id="SchBoxType" class="form-control">
+										<option value="Sbj">제목</option>
+										<option value="Num">발신번호</option>
 									</select>
 								</div>
-								<input type="text" class="form-control" placeholder="검색 키워드를 입력하세요!">
-								<span class="input-group-btn">
-									<button class="btn btn-primary" type="button">찾기</button>
-								</span>
+								<input type="text" id="searchBox" class="form-control" placeholder="검색 키워드를 입력하세요!">
 							</div>
 						</div>
 					</div>

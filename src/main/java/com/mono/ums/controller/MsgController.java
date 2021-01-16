@@ -1,5 +1,6 @@
 package com.mono.ums.controller;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,9 +77,14 @@ public class MsgController {
 		}
 	}
 	@RequestMapping("/selectDeleteSendItem")
-	public void selectDeleteSendItem(int msg_id ,HttpServletResponse response,HttpServletRequest request){
+	public void selectDeleteSendItem(String[] data ,HttpServletResponse response,HttpServletRequest request){
+		
+		for (String string : data) {
+			System.out.println(string);
+		}
+		/*DestTempDTO destTempDTO = new DestTempDTO();*/
 		try {
-			msgSendService.selectDeleteSendItem(msg_id);
+			//msgSendService.selectDeleteSendItem(data);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

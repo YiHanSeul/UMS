@@ -63,7 +63,7 @@ public class MsgSendServiceImpl implements MsgSendService {
 
 		resultMap.put("TOTAL_CNT", totalCnt);
 		resultMap.put("LIST", lists);
-
+		System.out.println("******"+lists);
 		return resultMap;
 	}
 
@@ -91,8 +91,8 @@ public class MsgSendServiceImpl implements MsgSendService {
 		
 	}
 	@Override
-	public void selectDeleteSendItem(int msg_id) {
-		msgSendMapper.selectDeleteSendItem(msg_id);
+	public void selectDeleteSendItem(ArrayList<DestTempDTO> data) {
+		msgSendMapper.selectDeleteSendItem(data);
 		
 	}
 

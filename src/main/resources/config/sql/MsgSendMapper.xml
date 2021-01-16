@@ -44,7 +44,8 @@
 	<select id="findSendItems" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 	<![CDATA[
 		SELECT 
-			DEST_NUM
+			MSG_ID
+			,DEST_NUM
 			,DEST_NAME
 			,VAR1
 			,VAR2

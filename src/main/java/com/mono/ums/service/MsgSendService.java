@@ -1,5 +1,6 @@
 package com.mono.ums.service;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public interface MsgSendService {
 
 	void deleteSendItem()throws Exception;
 	//수신자 별 선택 삭제 
-	void selectDeleteSendItem(int msg_id);
+	void selectDeleteSendItem(ArrayList<DestTempDTO> data);
 
 	
 	

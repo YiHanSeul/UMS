@@ -263,7 +263,7 @@ h5 {
 	font-weight: bold;
 }
 #selectDelteBtn{
-	width: 130px;
+	min-width: 160px;
 	height: 40px;
 	margin: auto;
 	font-size: 1.0em;
@@ -285,5 +285,12 @@ h5 {
 	background-color: #ff4d4d;
 }
 
+#dateResetDiv {
+	left: -27px;
+	top: 32px;
+}
+#dateResetBtn {
+	display: none;
+}
 
 
