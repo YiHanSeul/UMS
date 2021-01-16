@@ -8,9 +8,8 @@
 	<!-- 메뉴 표시 -->
 	<definition name="viewDefinition" template="/assets/tiles/templates/ums/viewTemplate.jsp">
 		<put-attribute name="header" value="/assets/tiles/templates/ums/header.jsp" />
-		<put-attribute name="sider" value="/assets/tiles/templates/ums/sider.jsp" />
-		<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="/assets/tiles/templates/ums/footer.jsp" /> 
+		<put-attribute name="menu" value="/assets/tiles/templates/ums/menu.jsp" />
+		<put-attribute name="serviceBox" value="" />
 	</definition>
 
 	<definition name="formDefinition" template="/assets/tiles/templates/ums/formTemplate.jsp">

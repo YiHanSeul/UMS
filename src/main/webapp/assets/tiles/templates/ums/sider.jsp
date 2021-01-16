@@ -1,18 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script>
-	$(document).ready(function() {
-		$('.detail_tabs li').click(function() {
-			/*$(".basic_tabs ul").children().removeClass("active");
-			$(this).addClass("active");*/
-			var ctl_temp = $(this).index();
-			var tagId = $(this).attr('id');
-			if ( tagId != null) {
-				window.location.href=tagId;
-			}
-		});
-		
 
-	})
 </script>
 
    <div class="main_box"> 

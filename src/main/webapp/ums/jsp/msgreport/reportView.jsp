@@ -125,6 +125,7 @@
 		splittemp = msgid.split('trset_');
 		$(".detailViewIn").css("display", "block");
 		destSelectItems();
+		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 		/*window.location.href="/ums/msgreport/reportDetailView?msgid=" + (parseInt(splittemp[1]));*/
 
