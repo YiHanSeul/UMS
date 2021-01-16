@@ -70,6 +70,8 @@
 						var $tdCol7 = $("<td />");
 						var $tdCol8 = $("<td />");
 						var $tdCol9 = $("<td />");
+						var $tdCol10= $("<td />");
+						
 						$tdCol1.text(lmmtemp+1);
 						$tdCol2.text(data.LISTS[datesort[lmmtemp]['number']].subject);
 						if (data.LISTS[i].schtype == 0) {
@@ -91,6 +93,14 @@
 						$tdCol7.text(data.LISTS[datesort[lmmtemp]['number']].msgcnt);
 						$tdCol8.text(data.LISTS[datesort[lmmtemp]['number']].succcnt);
 						$tdCol9.text(data.LISTS[datesort[lmmtemp]['number']].failcnt);
+						
+						var succ =data.LISTS[datesort[lmmtemp]['number']].succcnt;
+						var fail =data.LISTS[datesort[lmmtemp]['number']].failcnt;
+						if(succ == null && fail == null){
+							$tdCol10.text("전송 대기중");
+						}else{
+							$tdCol10.text("전송 완료");
+						}
 
 						$tr.append($tdCol1);
 						$tr.append($tdCol2);
@@ -101,6 +111,7 @@
 						$tr.append($tdCol7);
 						$tr.append($tdCol8);
 						$tr.append($tdCol9);
+						$tr.append($tdCol10);
 						$tbody.append($tr);
  
 					} 
@@ -118,8 +129,7 @@
 			}
 		});
 	}
-	
-	//여기는 바로 상세페이지로 들어가는게 필요할것같음
+	//상세내역 조회 페이지 나옴 
 	$(document).on('click', '#sendlist tr', function() {
 		msgid = $(this).attr('id') + "";
 		splittemp = msgid.split('trset_');
@@ -127,7 +137,6 @@
 		destSelectItems();
 		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
-		/*window.location.href="/ums/msgreport/reportDetailView?msgid=" + (parseInt(splittemp[1]));*/
 
 	});
 	function destSelectItems() {
@@ -425,6 +434,7 @@
 							<col style="width: 50px;" />
 							<col style="width: 50px;" />
 							<col style="width: 50px;" />
+							<col style="width: 50px;" />
 						</colgroup>
 						<thead>
 
@@ -438,6 +448,7 @@
 								<th class="title">총건수</th>
 								<th class="title">성공건수</th>
 								<th class="title">실패건수</th>
+								<th class="title">전송결과</th>
 							</tr>
 						</thead>
 						<tbody id="sendlist">

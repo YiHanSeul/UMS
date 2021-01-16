@@ -173,12 +173,12 @@
 					data : send,
 					success : function(data) {
 						if (data.RESULT_CODE == "1") {
-							swal("Send테이블에 정상적으로 inser됐습니다.", "success");
+							swal("메시지 전송이 완료되었습니다.", "success");
 							$("#sendMsgFrm").find("input").each(function() {
 								$(this).val("");
 							});
 						} else {
-							swal("Send테이블에 Insert 실패 ", "danger");
+							swal("메시지 전송을 실패했습니다. ", "danger");
 						}
 						schSendItems();
 					},

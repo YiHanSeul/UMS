@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class SendDTO implements Serializable {
 	
 	private static final long serialVersionUID = -3785302758805778415L;
+	
+	
 	private int msg_id;
 	private String sendType;
 	private int schType;

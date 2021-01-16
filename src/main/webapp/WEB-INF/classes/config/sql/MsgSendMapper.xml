@@ -89,7 +89,7 @@
 		,#{subject}
 		,#{departNum}
 		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
-		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
 		,#{msgCnt}
 		,#{msgContent}
 		,#{msg_id}
@@ -118,7 +118,7 @@
 		,#{subject}
 		,#{departNum}
 		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
-		,#{sendDate}
+		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
 		,#{msgCnt}
 		,#{msgContent}
 		,#{msg_id}
@@ -155,7 +155,7 @@
 		,#{subject}
 		,#{departNum}
 		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
-		,TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
+		,#{sendDate}
 		,#{msgCnt}
 		,#{msgContent}
 		,#{msg_id}

@@ -95,11 +95,13 @@ public class MsgSendServiceImpl implements MsgSendService {
 		Map<String, Object> resultSend = new HashMap<String, Object>();
 		resultSend.put("RESULT_CODE", "1");
 		int type = sdkDTO.getSchType();
+		System.out.println("전송 타입 출력 "+type);
 		System.out.println("발번:" + sdkDTO.getDepartNum() + "내용:" + sdkDTO.getMsgContent());
 		if (StringUtils.isEmpty(sdkDTO.getDepartNum()) && StringUtils.isEmpty(sdkDTO.getMsgContent())) {
 			resultSend.put("RESULT_CODE", "0");
 		} else {
 			msgSendMapper.send(sdkDTO);
+			System.out.println("sendMapper의 sdkDTO임 "+sdkDTO);
 			msgSendMapper.destCopy(sdkDTO);
 			System.out.println("복사완료");
 			msgSendMapper.deleteTemp(sdkDTO);
@@ -107,8 +109,11 @@ public class MsgSendServiceImpl implements MsgSendService {
 			int msg_id = sdkDTO.getMsg_id();
 			System.out.println(msg_id);
 			ArrayList<SendDTO> temp = msgSendMapper.tJoin(msg_id);
+			System.out.println();
 			if (type == 0) {// 즉시전송일 경우
 				System.out.println(sdkDTO.getSchType());
+				System.out.println("여기는 즉시전송 여기로 가면안됨!!!!!!!!!!!!!!!!");
+				System.out.println(sdkDTO.getNowDate());
 				for (SendDTO s : temp) {
 					s.setMsg_id(msg_id);
 					System.out.println(s.getMsg_id());
@@ -118,8 +123,10 @@ public class MsgSendServiceImpl implements MsgSendService {
 				}
 			} else {// 예약전송일 경우
 				System.out.println(sdkDTO.getSchType());
+				System.out.println("여기는 예약전송 잘온게 맞음!!!!!!!!!!");
 				for (SendDTO s : temp) {
 					s.setMsg_id(msg_id);
+					System.out.println("******예약전송 확인중  : "+s.getSendDate());
 					s.setDestInfo(s.getDestNm() + '^' + s.getDestNum());
 					msgSendMapper.insertSDK2(s);
 					System.out.println(s.toString());
