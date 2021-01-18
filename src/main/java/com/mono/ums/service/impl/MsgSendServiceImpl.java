@@ -87,14 +87,19 @@ public class MsgSendServiceImpl implements MsgSendService {
 	}
 	@Override
 	public void deleteSendItem() throws Exception {
+		System.out.println("여기 서비스 임플 인디 ");
 		msgSendMapper.deleteSendItem();
 		
 	}
 	@Override
-	public void selectDeleteSendItem(ArrayList<DestTempDTO> data) {
-		msgSendMapper.selectDeleteSendItem(data);
+	public void selectDeleteSendItem(String[] data) {
+		for (String string : data) {
+			msgSendMapper.selectDeleteSendItem(string);
+			System.out.println("삭제 처리 완료 ");
+		}
 		
 	}
+	
 
 	@Override
 	public Map<String, Object> send(Model model, SdkDTO sdkDTO, SendDTO sendDTO, HttpServletResponse response) throws Exception {
@@ -199,5 +204,7 @@ public class MsgSendServiceImpl implements MsgSendService {
 		// TODO Auto-generated method stub
 
 	}
+
+
 
 }

@@ -30,7 +30,9 @@ public interface MsgSendService {
 
 	void deleteSendItem()throws Exception;
 	//수신자 별 선택 삭제 
-	void selectDeleteSendItem(ArrayList<DestTempDTO> data);
+	//void selectDeleteSendItem(String[] data);
+
+	void selectDeleteSendItem(String[] data);
 
 	
 	

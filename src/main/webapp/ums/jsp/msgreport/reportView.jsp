@@ -18,8 +18,9 @@
 				$("#msgCnt").text("총" + SbjList.length + "건");
 				$("#sendlist tr").removeAttr('SchCom')
 				$("#sendlist tr").css('display', 'block')
+				datailViewNumRf();
 				
-			}else if ($('#SchBoxType').val() == "Sbj") {
+			}else if ($('#SchBoxType').val() == "Sbj") { 
 				SchFinCnt = 0;
 				for ( j = 1 ; j < SbjList.length ; j++) {
 					strtemp = ""+SbjList[j];
@@ -34,6 +35,7 @@
 					}
 				}
 				$("#msgCnt").text("총" + SchFinCnt + "건");
+				datailViewNumRf();
 				
 			} else {
 				SchFinCnt = 0;
@@ -49,7 +51,9 @@
 						$("#sendlist tr:eq("+ (j-1) +")").css('display', 'none')
 					}
 				}
+				
 				$("#msgCnt").text("총" + SchFinCnt + "건");
+				datailViewNumRf();
 								
 				
 			}
@@ -206,10 +210,16 @@
 								}
 
 							}
+
+							
 							$("#msgCnt").text("총" + FilteringMsgcnt + "건");
+							
 							if (FilteringMsgcnt == 0) {
 								$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
+							} else {
+								datailViewNumRf()
 							}
+							
 
 						} else {
 							$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
@@ -225,6 +235,28 @@
 					}
 				});
 	}
+	function datailViewNumRf() {
+		var ftrcnt = 0;
+		for ( j = 0 ; j < $('#sendlist tr').length ; j++) {
+			if ( $('#sendlist tr:eq('+j+')').attr('schcom') != 'false') {
+				ftrcnt++;
+			}
+			
+		}
+		var ftrcnt2 = 0;
+		for ( j = 0 ; j < $('#sendlist tr').length ; j++) {
+			if ( $('#sendlist tr:eq('+j+')').attr('schcom') != 'false') {
+				ftrcnt2++;
+				 $('#sendlist tr:eq('+j+') td:eq(0)').text(ftrcnt-ftrcnt2+1)
+				 console.log($('#sendlist tr:eq('+j+') td:eq(0)').text())
+
+			}
+			
+		}		
+	
+		
+	}
+	
 
 	//예약전송 메시지 아직 발송 안한거 삭제시키는 함수
 	
@@ -275,18 +307,22 @@
 
 	//상세내역 조회 페이지 나옴 
 	$(document).on('click', '#sendlist tr', function() {
-		msgid = $(this).attr('id') + "";
-		splittemp = msgid.split('trset_');
-		$(".detailViewIn").css("display", "block");
-		if ($(this).children(":eq(-1)").text() == "전송 대기") {
-			var schtype = false;
-		} else {
-			var schtype = true;
+		if ($(this).attr('id').indexOf('trset_') != -1) {
+			msgid = $(this).attr('id') + "";
+			splittemp = msgid.split('trset_');
+			$(".detailViewIn").css("display", "block");
+			if ($(this).children(":eq(-1)").text() == "전송 대기") {
+				var schtype = false;
+			} else {
+				var schtype = true;
+			}
+			destSelectItems(schtype);
+			$("html, body").animate({
+				scrollTop : $(document).height()
+			}, 1000);			
+			
 		}
-		destSelectItems(schtype);
-		$("html, body").animate({
-			scrollTop : $(document).height()
-		}, 1000);
+
 	});
 	function destSelectItems(schtypeVar) {
 
@@ -437,7 +473,7 @@
 						<i class="fa fa-commenting-o title-font" aria-hidden="true"></i> 메시지 유형
 					</label>
 					<form id="selectSearch" name="selectSearch" method="post">
-						<select class="form-control" id="sendTypeSelect" onchange="schReportItems();$('#searchBox').val('');">
+						<select class="form-control" id="sendTypeSelect" onchange="schReportItems();$('#searchBox').val('');datailViewNumRf();">
 							<option value="ALL">전체</option>
 							<option value="SMS">SMS</option>
 							<option value="MMS">MMS</option>
@@ -450,7 +486,7 @@
 					<label>
 						<i class="fa fa-clock-o title-font" aria-hidden="true"></i> 예약전송 유무
 					</label>
-					<select class="form-control" id="sendTimeSelect" " onchange="schReportItems();$('#searchBox').val('');">
+					<select class="form-control" id="sendTimeSelect" " onchange="schReportItems();$('#searchBox').val('');datailViewNumRf();">
 						<option value="100">전체</option>
 						<option value="0">즉시전송</option>
 						<option value="1">예약전송</option>

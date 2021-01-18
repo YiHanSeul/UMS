@@ -2,6 +2,7 @@
 <script type="text/javascript">
 	var ListCheck = false;
 	var ListSelCnt = 0;
+	var delAllList;
 	$(document).ready(function() {
 		schSendItems();
 		$("#msgContent").keyup(function() {
@@ -136,46 +137,102 @@
 
 	function addSendItem() {
 		if (confirm("대상자를 추가하시겠습니까?")) {
-			$.ajax({
-				type : "POST",
-				url : '${contextPath}/ums/msgsend/addSendItem.json',
-				data : $("#sendItemFrm").serialize(),
-				success : function(data) {
-					if (data.RESULT_CODE == "1") {
-						swal("수신대상이 추가되었습니다.", "총건:1건\n중복건:1건", "success");
+			sameFlag = true;
+			for ( j = 0 ; j < $('#receiveList').children().length ; j++) {
+    		    console.log();
+    		    if (phoneFomatter($("#NumSameChk").val(),1) == $("#receiveList tr:eq("+j+") td:eq(2)").text()) {
+    		    	swal("수신대상등록에 실패하였습니다.", "등록하려는 번호가 이미\n존재하고 있습니다", "warning");
+    		    	sameFlag = false;
+    		    	break;
+    		    }
+    		}
+			if (sameFlag) {
+				$.ajax({
+					type : "POST",
+					url : '${contextPath}/ums/msgsend/addSendItem.json',
+					data : $("#sendItemFrm").serialize(),
+					success : function(data) {
+						if (data.RESULT_CODE == "1") {
+							swal("수신대상이 추가되었습니다.", "총건:1건\n중복건:1건", "success");
 
-						$("#sendItemFrm").find("input").each(function() {
-							$(this).val("");
-						});
-					} else {
-						swal("수신대상등록에 실패하였습니다.", "", "warning");
+							$("#sendItemFrm").find("input").each(function() {
+								$(this).val("");
+							});
+						} else {
+							swal("수신대상등록에 실패하였습니다.", "", "warning");
+						}
+						schSendItems();
+					},
+					complete : function(data) {
+
+					},
+					error : function(request, status, error) {
+						alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 					}
-					schSendItems();
-				},
-				complete : function(data) {
+				});				
+				
+				
+			}
+			
+			
 
-				},
-				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
 		}
 	}
 	function deleteSendItem() {
-		if (confirm("대상자를 전체 삭제하시겠습니까?"))
-			$.ajax({
-				type : "POST",
-				url : '${contextPath}/ums/msgsend/deleteSendItem',
-				success : function(data) {
-					schSendItems();
-				},
-				complete : function(data) {
+		delAllList = [];
+		var loopcnt = 0;
+    	for ( j = 0 ; j < $('#receiveList').children().length ; j++) {
+    		    delAllList[j] = $("#receiveList").children(":eq("+j+")").attr('id').split('_')[1];
+    		    loopcnt++;
+    		}
+	
+		swal({
+		    title: "전체 수신자 삭제",
+		    text: "전체(" + loopcnt +"명)\n수신자를 삭제 하시겠습니까?",
+		    icon: "warning",
+		    buttons: ["아니오", "예"]
+		}).then((YES) => {
+		    if (YES) {
+		    	ListCheck = false;
+		    	ListSelCnt=0;
+		    	//var dataList = $('#receiveList tr').css("backgroundColor","#ffffff");
+		    	var loopcnt = 0;
+		    	var dellist= [];
+		    	for ( i = 0 ; i < $('#receiveList').children().length ; i++) {
+		    		if ($("#receiveList").children(":eq("+i+")").css('backgroundColor') =="rgb(255, 117, 117)") {
+		    			console.log($("#receiveList").children(":eq("+i+")").attr('id'));
+		    			dellist[loopcnt] = $("#receiveList").children(":eq("+i+")").attr('id').split('_')[1];
+		    			loopcnt++;
+		    		}
+		    	}
+				$.ajax({
+					
+					type : "POST",
+					url : '${contextPath}/ums/msgsend/selectDeleteSendItem',
+					data: {
+						'data' : delAllList
+					},
+					traditional : true,
+					success : function(data) {
+						schSendItems();
+						swal("수신자가 전체 삭제되었습니다", "", "success");
+					},
+					complete : function(data) {
 
-				},
-				error : function(request, status, error) {
-					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				}
-			});
+					},
+					error : function(request, status, error) {
+						alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+					}
+				});	
+	    	
+		    }else{
+
+		    }
+		});			
+	
+		
+
+	
 	}
 	function selectDelteBtn(){ 
 		if (ListCheck) {
@@ -217,6 +274,7 @@
 							traditional : true,
 							success : function(data) {
 								schSendItems();
+								swal("선택한 수신자 삭제", "선택한 "+loopcnt+"명의 수신자\n삭제가 완료 되었습니다", "success");
 							},
 							complete : function(data) {
 
@@ -249,15 +307,6 @@
 			$("#totalCnt").text(strtemp+"  [ 0명 선택됨 ]");
 			$("#selectDelteBtn").text("클릭시 삭제 혹은 취소");			
 		}
-		
-
-
-			
-			
-			
-			
-
-			
 	}
 	function send() {
 		var msgCnt = $('#receiveList tr').last().find("td").eq(0).text();
@@ -406,7 +455,7 @@
 						</div>
 						<div class="col-lg-6">
 							<label>수신번호</label>
-							<input type="text" name="destNum" class="form-control" />
+							<input type="text" name="destNum" class="form-control" id="NumSameChk" />
 						</div>
 					</div>
 					<div class="row">

@@ -227,6 +227,11 @@
 	<delete id="deleteSendItem">
 		TRUNCATE TABLE UMS_DEST_TEMP
 	</delete>
+	<!-- 수신자 선택삭제 -->	
+	<delete id="selectDeleteSendItem">
+		DELETE FROM UMS_DEST_TEMP
+		WHERE MSG_ID= #{data}
+	</delete>
 	<!-- 여기는 SEND테이블 DEST테이블 조인 -->
 	<select id="tJoin" resultType="SendDTO">
 		SELECT

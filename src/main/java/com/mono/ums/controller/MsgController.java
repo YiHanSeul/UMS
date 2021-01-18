@@ -70,6 +70,7 @@ public class MsgController {
 	}
 	@RequestMapping("/deleteSendItem")
 	public void deleteSendItem(HttpServletResponse response, HttpServletRequest req){
+		System.out.println("여기는 컨털 인디 ");
 		try {
 			msgSendService.deleteSendItem();
 		} catch (Exception e) {
@@ -78,13 +79,9 @@ public class MsgController {
 	}
 	@RequestMapping("/selectDeleteSendItem")
 	public void selectDeleteSendItem(String[] data ,HttpServletResponse response,HttpServletRequest request){
-		
-		for (String string : data) {
-			System.out.println(string);
-		}
 		/*DestTempDTO destTempDTO = new DestTempDTO();*/
 		try {
-			//msgSendService.selectDeleteSendItem(data);
+			msgSendService.selectDeleteSendItem(data);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

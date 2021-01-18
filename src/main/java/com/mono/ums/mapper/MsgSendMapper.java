@@ -39,7 +39,7 @@ public interface MsgSendMapper {
 
 	void deleteSendItem();
 
-	void selectDeleteSendItem(ArrayList<DestTempDTO> data);
+	void selectDeleteSendItem(String string);
 
 
 }
