@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.mono.ums.dto.DestTempDTO;
 import com.mono.ums.dto.SdkDTO;
 import com.mono.ums.dto.SendDTO;
+import com.mono.ums.dto.varDTO;
 import com.mono.ums.mapper.MsgSendMapper;
 import com.mono.ums.service.MsgSendService;
 
@@ -117,7 +118,12 @@ public class MsgSendServiceImpl implements MsgSendService {
 			System.out.println("복사완료");
 			msgSendMapper.deleteTemp(sdkDTO);
 			System.out.println("템프테이블 삭제 완료");
+			
 			int msg_id = sdkDTO.getMsg_id();
+			varDTO varDTO=new varDTO();
+			varDTO =msgSendMapper.var(msg_id);
+			System.out.println(varDTO.getVar1());
+			System.out.println(varDTO.getVar2());
 			System.out.println(msg_id);
 			ArrayList<SendDTO> temp = msgSendMapper.tJoin(msg_id);
 			System.out.println();
@@ -128,7 +134,9 @@ public class MsgSendServiceImpl implements MsgSendService {
 				for (SendDTO s : temp) {
 					s.setMsg_id(msg_id);
 					System.out.println(s.getMsg_id());
-					s.setDestInfo(s.getDestNm() + '^' + s.getDestNum());
+					s.setVar1(varDTO.getVar1());
+					s.setVar2(varDTO.getVar2());
+					s.setDestInfo(s.getDestNm() + '^' + s.getDestNum()+'^'+s.getVar1()+'^'+s.getVar2());
 					msgSendMapper.insertSDK(s);
 					System.out.println(s.toString());
 				}

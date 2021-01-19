@@ -379,8 +379,14 @@
 		)
 		]]>
 	</insert>
-
-
+	
+	<select id="var"  resultType="varDTO">
+	<![CDATA[
+		SELECT var1, var2
+		FROM UMS_DEST
+		WHERE MSGID=#{msg_id}
+	]]>
+	</select>
 
 	<!-- ******************************************** -->
 </mapper>

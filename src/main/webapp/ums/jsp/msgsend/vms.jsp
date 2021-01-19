@@ -227,10 +227,7 @@ function getByteB(str) {
 				<input id="subject" type="text" class="form-control" name="subject" />
 				<label>전송메시지</label>
 				<textarea id="msgContent" class="form-control pb-2" rows="10" placeholder="문자 내용을 입력해주세요. (90Bytes 초과시 LMS로 전환)"></textarea>
-				<div>
-					<div id="danjang">단문</div>	
-					<div id="nowdanjang">0/2000 Bytes</div>			
-				</div>
+				
 				<label>발신번호</label>
 				<input id="departNum" type="text" class="form-control" id="depart_num" maxlength="13" />
 			

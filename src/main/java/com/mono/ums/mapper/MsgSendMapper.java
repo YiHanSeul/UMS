@@ -7,6 +7,7 @@ import java.util.Map;
 import com.mono.ums.dto.DestTempDTO;
 import com.mono.ums.dto.SdkDTO;
 import com.mono.ums.dto.SendDTO;
+import com.mono.ums.dto.varDTO;
 
 public interface MsgSendMapper {
 
@@ -40,6 +41,8 @@ public interface MsgSendMapper {
 	void deleteSendItem();
 
 	void selectDeleteSendItem(String string);
+
+	varDTO var(int msg_id);
 
 
 }

@@ -176,11 +176,7 @@ function schSendItems() {
 				<div id="imgPreviewCell">
 					
 				</div>
-				<textarea id="msgContent" class="form-control pb-2" rows="10" placeholder="문자 내용을 입력해주세요. (90Bytes 초과시 LMS로 전환)"></textarea>
-				<div>
-					<div id="danjang">단문</div>	
-					<div id="nowdanjang">0/2000 Bytes</div>			
-				</div>
+				<textarea id="msgContent" class="form-control pb-2" rows="10" placeholder="문자 내용을 입력해주세요."></textarea>
 				<div class="form-group">
 					<label for="InputSubject1">파일첨부</label>
 					<input id="fileInput" multiple filestyle="" type="file" data-calss-button="btn btn-default" data-class-input="form-control" data-button-text=""
@@ -300,6 +296,9 @@ function schSendItems() {
 					</tbody>
 				</table>
 				<div class="col-12 text-right">
+					<div class="btn-group">
+						<button id="selectDelteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="selectDelteBtn()">삭제할 수신자 선택</button>
+					</div>
 					<div class="btn-group">
 						<button id="delteBtn" type="button" class="btn btn-primary btn-lg mr-1" onclick="deleteSendItem()">수신자 전체 삭제</button>
 					</div>

@@ -42,12 +42,6 @@
 
 		});		
 		
-		
-		
-		
-		
-		
-
 	});
 	function ListSelCntRf(){
 		var strtemp= $("#totalCnt").text().split('  [');

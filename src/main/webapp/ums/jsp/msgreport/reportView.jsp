@@ -174,7 +174,10 @@
 									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(8, 10) + ":";
 									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
 									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(12, 14);
-									$tdCol4.text(prettydate);
+									 $tdCol4.text(prettydate); 
+								
+								
+									
 									$tdCol5.text(phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1));
 
 									$tdCol6.text(data.LISTS[datesort[lmmtemp]['number']].sendtype);
@@ -298,11 +301,6 @@
 		});
 
 		
-		
-		
-
-
-
 	}
 
 	//상세내역 조회 페이지 나옴 
@@ -403,8 +401,8 @@
 							$tdCol5.text("실패");
 						}
 
-						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].fail_count") == 1) {
-							$tdCol6.text("실패사유 ");
+						if (eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].fail_count") == 1 &&eval("data.LISTS" + data.SENDLISTS[0].sendtype + "[" + i + "].tcs_result") == 404) {
+							$tdCol6.text("사용자를찾을수없음 ");
 						} else {
 							$tdCol6.text("");
 						}
@@ -637,9 +635,8 @@
 				</div>
 			</div>
 		</div>
-		<div id="destViewBtnList" class="col-lg-12 float-right">
+		<div id="destViewBtnList float-right ml-4" class="col-lg-12 float-right" value="닫기"/>
 			<input class="btn btn-primary float-right ml-4" type="button" onclick="$('.detailViewIn').css('display','none')" value="닫기" />
-
 		</div>
 	</div>
 </div>
