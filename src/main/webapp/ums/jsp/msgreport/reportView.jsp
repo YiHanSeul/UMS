@@ -54,16 +54,10 @@
 				
 				$("#msgCnt").text("총" + SchFinCnt + "건");
 				datailViewNumRf();
-								
-				
 			}
-			
-			
 		});	
 		
 	});
-
-	
 
 	function phoneFomatter(num, type) {
 		var formatNum = '';
@@ -92,7 +86,6 @@
 		}
 		return formatNum;
 	}
-
 	
 	function dateFilter(ResetType) {
 		if (ResetType) {
@@ -116,9 +109,7 @@
 				
 			}
 		}
-
 	}
-	
 	
 	function schReportItems() {
 		$.ajax({
@@ -175,8 +166,6 @@
 									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(10, 12) + ":";
 									prettydate += data.LISTS[datesort[lmmtemp]['number']].senddate.substring(12, 14);
 									 $tdCol4.text(prettydate); 
-								
-								
 									
 									$tdCol5.text(phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1));
 
@@ -208,12 +197,9 @@
 									$tbody.append($tr);
 									SbjList[FilteringMsgcnt] = data.LISTS[datesort[lmmtemp]['number']].subject;
 									NumList[FilteringMsgcnt] = phoneFomatter(data.LISTS[datesort[lmmtemp]['number']].departnum, 1);
-									
 
 								}
-
 							}
-
 							
 							$("#msgCnt").text("총" + FilteringMsgcnt + "건");
 							
@@ -222,13 +208,10 @@
 							} else {
 								datailViewNumRf()
 							}
-							
 
 						} else {
 							$tbody.html("<tr><td colspan=\"9\" class=\"text-center\">발송된 메시지가  없습니다.</td></tr>");
-
 						}
-
 					},
 					complete : function(data) {
 
@@ -244,7 +227,6 @@
 			if ( $('#sendlist tr:eq('+j+')').attr('schcom') != 'false') {
 				ftrcnt++;
 			}
-			
 		}
 		var ftrcnt2 = 0;
 		for ( j = 0 ; j < $('#sendlist tr').length ; j++) {
@@ -252,20 +234,9 @@
 				ftrcnt2++;
 				 $('#sendlist tr:eq('+j+') td:eq(0)').text(ftrcnt-ftrcnt2+1)
 				 console.log($('#sendlist tr:eq('+j+') td:eq(0)').text())
-
 			}
-			
 		}		
-	
-		
 	}
-	
-
-	//예약전송 메시지 아직 발송 안한거 삭제시키는 함수
-	
-	
-	
-	
 	
 	function CvsDelete(msgid) {
 		msg_id = msgid; 
@@ -296,13 +267,9 @@
 			});		        
 		        
 		    }else{
-		    	
 		    }
 		});
-
-		
 	}
-
 	//상세내역 조회 페이지 나옴 
 	$(document).on('click', '#sendlist tr', function() {
 		if ($(this).attr('id').indexOf('trset_') != -1) {
@@ -318,9 +285,7 @@
 			$("html, body").animate({
 				scrollTop : $(document).height()
 			}, 1000);			
-			
 		}
-
 	});
 	function destSelectItems(schtypeVar) {
 

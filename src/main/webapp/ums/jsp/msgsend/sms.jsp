@@ -21,28 +21,28 @@
 			}
 			$('#nowdanjang').text(getByteB(mctemp) + '/2000 Bytes');
 		});
-		$(document).on('click', '#receiveList tr', function() {
-			//alert($(this).css("backgroundColor"));
-			if (ListCheck) {
-				if ($(this).css("backgroundColor") == "rgb(255, 117, 117)") {
-					$(this).css("backgroundColor","#ffffff");
-					ListSelCnt--;
-					ListSelCntRf()
-					
-					
-				}else {
-					$(this).css("backgroundColor","#ff7575");
-					ListSelCnt++;
-					ListSelCntRf()
-				}
-				
-				//UserID = $(this).attr('id').split("_");
-				
-			}
-
-		});		
 		
 	});
+	$(document).on('click', '#receiveList tr', function() {
+		//alert($(this).css("backgroundColor"));
+		if (ListCheck) {
+			if ($(this).css("backgroundColor") == "rgb(255, 117, 117)") {
+				$(this).css("backgroundColor","#ffffff");
+				ListSelCnt--;
+				ListSelCntRf()
+				
+				
+			}else {
+				$(this).css("backgroundColor","#ff7575");
+				ListSelCnt++;
+				ListSelCntRf()
+			}
+			
+			//UserID = $(this).attr('id').split("_");
+			
+		}
+
+	});	
 	function ListSelCntRf(){
 		var strtemp= $("#totalCnt").text().split('  [');
 		$("#totalCnt").text(strtemp[0]+"  [ "+ ListSelCnt +"명 선택됨 ]");			
@@ -133,51 +133,55 @@
 		if (confirm("대상자를 추가하시겠습니까?")) {
 			sameFlag = true;
 			for ( j = 0 ; j < $('#receiveList').children().length ; j++) {
-    		    console.log();
     		    if (phoneFomatter($("#NumSameChk").val(),1) == $("#receiveList tr:eq("+j+") td:eq(2)").text()) {
-    		    	swal("수신대상등록에 실패하였습니다.", "등록하려는 번호가 이미\n존재하고 있습니다", "warning");
+    		    	swal("수신대상등록에 실패하였습니다.", "등록하려는 번호가 이미\n존재하고 있습니다", "error");
     		    	sameFlag = false;
     		    	break;
     		    }
     		}
-			if (sameFlag) {
-				$.ajax({
-					type : "POST",
-					url : '${contextPath}/ums/msgsend/addSendItem.json',
-					data : $("#sendItemFrm").serialize(),
-					success : function(data) {
-						if (data.RESULT_CODE == "1") {
-							swal("수신대상이 추가되었습니다.", "총건:1건\n중복건:1건", "success");
-
-							$("#sendItemFrm").find("input").each(function() {
-								$(this).val("");
-							});
-						} else {
-							swal("수신대상등록에 실패하였습니다.", "", "warning");
+			//parseInt(String ,)
+			console.log("타입은  : " +isNaN($("#NumSameChk").val()));
+			if(isNaN($("#NumSameChk").val())==true){
+				swal("수신대상등록에 실패하였습니다.", "숫자를 입력해주세요", "error");
+			}else{
+				if (sameFlag) {
+					$.ajax({
+						type : "POST",
+						url : '${contextPath}/ums/msgsend/addSendItem.json',
+						data : $("#sendItemFrm").serialize(),
+						success : function(data) {
+							if (data.RESULT_CODE == "1") {
+								
+								swal("수신자가 추가되었습니다.", "성공", "success");
+	
+								$("#sendItemFrm").find("input").each(function() {
+									$(this).val("");
+								});
+							} else {
+								swal("수신대상등록에 실패하였습니다.", "", "warning");
+							}
+							schSendItems();
+						},
+						complete : function(data) {
+	
+						},
+						error : function(request, status, error) {
+							alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 						}
-						schSendItems();
-					},
-					complete : function(data) {
-
-					},
-					error : function(request, status, error) {
-						alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-					}
-				});				
-				
-				
+					});				
+				}
 			}
-			
-			
-
 		}
 	}
 	function deleteSendItem() {
 		delAllList = [];
 		var loopcnt = 0;
     	for ( j = 0 ; j < $('#receiveList').children().length ; j++) {
-    		    delAllList[j] = $("#receiveList").children(":eq("+j+")").attr('id').split('_')[1];
+    		    delAllList[j] = $("#receiveList tr:eq("+j+")").attr('id').split('_')[1];
+    		    //$("#receiveList tr:eq("+j+")").attr('id')
+    		    /* $("#receiveList").children(":eq("+j+")").attr('id').split('_')[1]; */
     		    loopcnt++;
+    		    $("#receiveList tr:eq("+j+") td:eq(0)").attr('id')
     		}
 	
 		swal({
@@ -187,18 +191,7 @@
 		    buttons: ["아니오", "예"]
 		}).then((YES) => {
 		    if (YES) {
-		    	ListCheck = false;
-		    	ListSelCnt=0;
 		    	//var dataList = $('#receiveList tr').css("backgroundColor","#ffffff");
-		    	var loopcnt = 0;
-		    	var dellist= [];
-		    	for ( i = 0 ; i < $('#receiveList').children().length ; i++) {
-		    		if ($("#receiveList").children(":eq("+i+")").css('backgroundColor') =="rgb(255, 117, 117)") {
-		    			console.log($("#receiveList").children(":eq("+i+")").attr('id'));
-		    			dellist[loopcnt] = $("#receiveList").children(":eq("+i+")").attr('id').split('_')[1];
-		    			loopcnt++;
-		    		}
-		    	}
 				$.ajax({
 					
 					type : "POST",
@@ -223,10 +216,6 @@
 
 		    }
 		});			
-	
-		
-
-	
 	}
 	function selectDelteBtn(){ 
 		if (ListCheck) {
@@ -243,7 +232,7 @@
 				    title: "선택 수신자 삭제",
 				    text: "선택된" + ListSelCnt +"명의\n수신자를 삭제 하시겠습니까?",
 				    icon: "warning",
-				    buttons: ["아니오", "예"]
+				    buttons: ["아니요", "예"]
 				}).then((YES) => {
 				    if (YES) {
 				    	ListCheck = false;
@@ -259,29 +248,20 @@
 				    		}
 				    	}
 						$.ajax({
-							
 							type : "POST",
 							url : '${contextPath}/ums/msgsend/selectDeleteSendItem',
 							data: {
 								'data' : dellist
 							},
-							traditional : true,
+							traditional : true, //ajax에서 배열의 값을 넘겨줄때 사용
 							success : function(data) {
 								schSendItems();
 								swal("선택한 수신자 삭제", "선택한 "+loopcnt+"명의 수신자\n삭제가 완료 되었습니다", "success");
-							},
-							complete : function(data) {
-
 							},
 							error : function(request, status, error) {
 								alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 							}
 						});
-				    	
-				    	
-				    	
-				    	
-				    	
 				    }else{
 						ListCheck = false;
 						ListSelCnt=0;
@@ -289,10 +269,8 @@
 						var strtemp= $("#totalCnt").text().split('  [');
 						$("#totalCnt").text(strtemp[0]);	
 						$("#selectDelteBtn").text("삭제할 수신자 선택");	
-				    	
 				    }
 				});							
-			
 			}
 		}else {
 			ListCheck = true;
@@ -318,9 +296,7 @@
 			console.log(msgCnt);
 			console.log(schType);
 			if (confirm("메시지를 전송하시 겠습니까?")) {
-
 				var send = {
-
 					subject : $("#subject").val(),
 					msgContent : $("#msgContent").val(),
 					departNum : $("#departNum").val(),
@@ -353,48 +329,44 @@
 					}
 				});
 			}
-
 		} else {
-			alert("[!] 전송타입을 체크해주세요.")
-
+			swal("전송 타입을 체크해주세요", "즉시/예약", "error");
 		}
-
 	}
 	function radioNow() {
 		$('#Time').val(''); // 입력된 과일 종류 값이 있으면, 초기화합니다.
 		$('#Time').attr('disabled', true); // 과일 종류를
-		// 입력하는
-		// input 을
-		// 비활성화합니다.
 		$('#Date').val('');
 		$('#Date').attr('disabled', true);
-
 	}
 	function radioSend() {
 		$('#Time').attr('disabled', false); // 과일 종류를
-		// 입력하는
-		// input 을
-		// 활성화합니다.
 		$('#Time').focus(); // 과일 종류를 입력하는 input 에 커서를
-		// 이동시킵니다.
 		$('#Date').attr('disabled', false);
 		$('#Date').focus();
 	}
 	function getByteB(str) {
-
 		var byte = 0;
-
 		for (var i = 0; i < str.length; ++i) {
-
-			// 기본 한글 2바이트 처리
-
 			(str.charCodeAt(i) > 127) ? byte += 2 : byte++;
-
 		}
-
 		return byte;
-
 	}
+	$(document).on('click', '#indiviAdd option', function() {
+		
+		$("#msgContent").text("$TEXT$");
+				
+				
+		
+
+	});	
+	
+	function indiviAdd(){
+		$("#indiviAdd option").click(function(){
+			alert($("#indiviAdd option:selected").val());
+		})
+	}
+	
 </script>
 <p class="headerId">SMS</p>
 <div class="row" id="sendT">
@@ -403,7 +375,7 @@
 			<h5 class="title-font">
 				<i class="fa fa-envelope-open" aria-hidden="true"></i> 메시지작성
 			</h5>
-			<div class="col-12">
+			<div class="col-12" id="msg">
 				<label>메시지제목</label>
 				<input id="subject" type="text" class="form-control" name="subject" />
 				<label>전송메시지</label>
@@ -412,10 +384,18 @@
 					<div id="danjang">단문</div>
 					<div id="nowdanjang">0/2000 Bytes</div>
 				</div>
+				<div class="pt-3"></div>
+				<label>개별메시지 선택</label>
+				<select class="form-control" id="indiviAdd">
+					<option value="1">이름</option>
+					<option value="2">개별메시지1</option>
+					<option value="3">개별메시지2</option>
+					<option value="4">개별메시지3</option>
+				</select>
 				<label id="callnum">발신번호</label>
 				<input id="departNum" type="text" class="form-control" id="depart_num" maxlength="13" />
 
-				<div id="divradio" class="pt-1">
+				<div id="divradio" class="pt-1 text-center">
 					<label>
 						<input type="radio" name="radio" id="radio1" class="radio" value="0" onclick="radioNow()">
 						즉시 전송
@@ -454,21 +434,21 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-6">
-							<label>변수1</label>
+							<label>이름</label>
 							<input type="text" name="var1" class="form-control" />
 						</div>
 						<div class="col-lg-6">
-							<label>변수2</label>
+							<label>개별메시지1</label>
 							<input type="text" name="var2" class="form-control" />
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-6">
-							<label>변수3</label>
+							<label>개별메시지2</label>
 							<input type="text" name="var3" class="form-control" />
 						</div>
 						<div class="col-lg-6">
-							<label>변수4</label>
+							<label>개별메시지3</label>
 							<input type="text" name="var4" class="form-control" />
 						</div>
 					</div>
