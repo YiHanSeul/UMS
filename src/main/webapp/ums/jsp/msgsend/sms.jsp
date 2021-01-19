@@ -366,7 +366,6 @@
 			alert($("#indiviAdd option:selected").val());
 		})
 	}
-	
 </script>
 <p class="headerId">SMS</p>
 <div class="row" id="sendT">
