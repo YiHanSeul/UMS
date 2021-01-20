@@ -352,19 +352,15 @@
 		}
 		return byte;
 	}
-	$(document).on('click', '#indiviAdd option', function() {
-		
-		$("#msgContent").text("$TEXT$");
-				
-				
-		
-
-	});	
 	
 	function indiviAdd(){
-		$("#indiviAdd option").click(function(){
-			alert($("#indiviAdd option:selected").val());
-		})
+			//$("#msgContent").text($("#indiviAdd option:selected").val());
+			//$("#msgContent").text($("#indiviAdd option:selected").val());
+			  $("#msgContent").text($("#msgContent").text()+$("#indiviAdd option:selected").val());
+		/* 	
+   		$("msgContent").text($("msgContent").text()+$("#indiviAdd option:selected").val());
+        strtemp=$("#msgContent").text(); */
+		alert($("#indiviAdd option:selected").val());
 	}
 </script>
 <p class="headerId">SMS</p>
@@ -385,11 +381,12 @@
 				</div>
 				<div class="pt-3"></div>
 				<label>개별메시지 선택</label>
-				<select class="form-control" id="indiviAdd">
-					<option value="1">이름</option>
-					<option value="2">개별메시지1</option>
-					<option value="3">개별메시지2</option>
-					<option value="4">개별메시지3</option>
+				<select class="form-control" id="indiviAdd" onchange="indiviAdd();">
+					<option value="" selected disabled hidden>선택</option>
+					<option value="$NAME$">이름</option>
+					<option value="$TEXT1$">개별메시지1</option>
+					<option value="$TEXT2$">개별메시지2</option>
+					<option value="$TEXT3$">개별메시지3</option>
 				</select>
 				<label id="callnum">발신번호</label>
 				<input id="departNum" type="text" class="form-control" id="depart_num" maxlength="13" />

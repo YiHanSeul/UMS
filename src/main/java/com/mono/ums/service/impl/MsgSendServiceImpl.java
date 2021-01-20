@@ -122,8 +122,6 @@ public class MsgSendServiceImpl implements MsgSendService {
 			int msg_id = sdkDTO.getMsg_id();
 			varDTO varDTO=new varDTO();
 			varDTO =msgSendMapper.var(msg_id);
-			System.out.println(varDTO.getVar1());
-			System.out.println(varDTO.getVar2());
 			System.out.println(msg_id);
 			ArrayList<SendDTO> temp = msgSendMapper.tJoin(msg_id);
 			System.out.println();
@@ -134,9 +132,10 @@ public class MsgSendServiceImpl implements MsgSendService {
 				for (SendDTO s : temp) {
 					s.setMsg_id(msg_id);
 					System.out.println(s.getMsg_id());
-					s.setVar1(varDTO.getVar1());
-					s.setVar2(varDTO.getVar2());
-					s.setDestInfo(s.getDestNm() + '^' + s.getDestNum()+'^'+s.getVar1()+'^'+s.getVar2());
+					/*s.setVar1(varDTO.getVar1());
+					s.setVar2(varDTO.getVar2());*/
+					//s.setDestInfo(s.getDestNm() + '^' + s.getDestNum()+'^'+s.getVar1()+'^'+s.getVar2());
+					s.setDestInfo(s.getDestNm() + '^' + s.getDestNum());
 					msgSendMapper.insertSDK(s);
 					System.out.println(s.toString());
 				}
