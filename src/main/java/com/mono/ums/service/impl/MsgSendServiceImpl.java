@@ -120,8 +120,6 @@ public class MsgSendServiceImpl implements MsgSendService {
 			System.out.println("템프테이블 삭제 완료");
 			
 			int msg_id = sdkDTO.getMsg_id();
-			varDTO varDTO=new varDTO();
-			varDTO =msgSendMapper.var(msg_id);
 			System.out.println(msg_id);
 			ArrayList<SendDTO> temp = msgSendMapper.tJoin(msg_id);
 			System.out.println();

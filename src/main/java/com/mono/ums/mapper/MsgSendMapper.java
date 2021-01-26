@@ -42,7 +42,7 @@ public interface MsgSendMapper {
 
 	void selectDeleteSendItem(String string);
 
-	varDTO var(int msg_id);
+	//varDTO var(int msg_id);
 
 
 }

@@ -283,6 +283,7 @@
 	function send() {
 		var msgCnt = $('#receiveList tr').last().find("td").eq(0).text();
 		var schType = $("input[name='radio']:checked").val();
+		alert("스케쥴 타입의 value값은  : " +schType);
 		if (schType) {
 			var cvsDateAry = $("#Date").val().split("-");
 			var cvsDate = cvsDateAry[0]+cvsDateAry[1]+cvsDateAry[2];
@@ -316,7 +317,7 @@
 								
 							});
 						} else {
-							swal("메시지 전송을 실패했습니다. ", "danger");
+							swal("메시지 전송을 실패했습니다. ", "error");
 						}
 						schSendItems();
 					},
